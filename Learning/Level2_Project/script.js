@@ -135,3 +135,46 @@ addTaskBtn.addEventListener("click", () => {
   }
 });
 renderTasks();
+
+/*                                  Notes Management                                         */
+const noteInput = document.getElementById("noteInput");
+const addNoteBtn = document.getElementById("addNoteBtn");
+const noteList = document.getElementById("notesList");
+//Initialize notes array from localStorage or start with an empty array
+let notesArray = JSON.parse(localStorage.getItem("notes")) || [];
+function renderNotes() {
+  noteList.innerHTML = "";
+  notesArray.forEach((note, index) => {
+    const noteCard = document.createElement("div");
+    noteCard.classList.add("note-card");
+    const noteContent = document.createElement("div");
+    noteContent.classList.add("note-content");
+    noteContent.textContent = note.text;
+    const noteDate = document.createElement("p");
+    noteDate.classList.add("note-date");
+    noteDate.textContent = new Date(note.createdAt).toLocaleDateString();
+    noteCard.appendChild(noteContent);
+    noteCard.appendChild(noteDate);
+    noteList.appendChild(noteCard);
+  });
+}
+// Add note on Enter key press
+noteInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    addNoteBtn.click();
+  }
+});
+addNoteBtn.addEventListener("click", () => {
+  console.log("Add Note button clicked");
+  const noteText = noteInput.value.trim();
+  if (noteText) {
+    notesArray.push({
+      text: noteText,
+      createdAt: new Date().toISOString(),
+    });
+    localStorage.setItem("notes", JSON.stringify(notesArray));
+    renderNotes();
+    noteInput.value = "";
+  }
+});
+renderNotes();
