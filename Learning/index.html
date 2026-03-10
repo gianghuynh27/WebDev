@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Learning page that demonstrates core HTML structure, content tags, tables, lists, and forms."
+    />
+    <meta
+      name="keywords"
+      content="HTML, meta tags, SEO, headings, paragraphs, div, span, table, lists, form"
+    />
+    <meta name="author" content="Your Name" />
+    <title>HTML Learning Overview</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        line-height: 1.5;
+        background: #f7f7f7;
+        color: #222;
+      }
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+      }
+      section {
+        margin-bottom: 24px;
+      }
+      .highlight {
+        color: #0a6;
+        font-weight: bold;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #999;
+        padding: 8px;
+        text-align: left;
+      }
+      form {
+        display: grid;
+        gap: 10px;
+      }
+      input,
+      select,
+      textarea,
+      button {
+        font: inherit;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Overview of HTML</h1>
+        <p>
+          HTML is the structure of a webpage. Think of it as the skeleton that
+          organizes your content.
+        </p>
+      </section>
+
+      <section>
+        <h2>Headings, Paragraphs, Divs, and Spans</h2>
+        <div>
+          <h3>Example Content Block</h3>
+          <p>
+            This is a paragraph inside a <code>&lt;div&gt;</code>. A
+            <span class="highlight">span</span> is used to style part of a
+            sentence without breaking into a new line.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Working with Tables</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>&lt;thead&gt;</td>
+              <td>Groups the table header rows.</td>
+            </tr>
+            <tr>
+              <td>&lt;tbody&gt;</td>
+              <td>Groups the main table rows.</td>
+            </tr>
+            <tr>
+              <td>&lt;tr&gt;, &lt;th&gt;, &lt;td&gt;</td>
+              <td>Row, header cell, and data cell.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Working with Lists</h2>
+        <h3>Unordered List</h3>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+        </ul>
+
+        <h3>Ordered List</h3>
+        <ol>
+          <li>Plan the page structure</li>
+          <li>Add content</li>
+          <li>Style it with CSS</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Forms and User Input</h2>
+        <form action="#" method="post">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Enter your name" />
+
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="Enter your email" />
+
+          <label for="topic">Favorite Topic</label>
+          <select id="topic" name="topic">
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="javascript">JavaScript</option>
+          </select>
+
+          <label for="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            placeholder="Write something..."
+          ></textarea>
+
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

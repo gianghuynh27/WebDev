@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semantic Portfolio + Media + Embed</title>
+    <meta
+      name="description"
+      content="A semantic HTML portfolio landing page with navigation, media, and embedded content."
+    />
+    <meta name="author" content="Your Name" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="page">
+      <header>
+        <a class="skip" href="#content">Skip to content</a>
+        <h1>Semantic Portfolio</h1>
+        <p class="small">Using semantic HTML, media, and embedded content.</p>
+      </header>
+
+      <nav aria-label="Primary navigation">
+        <ul>
+          <li><a href="#content">About</a></li>
+          <li><a href="#media">Media</a></li>
+          <li><a href="#embed">Embed</a></li>
+          <li><a href="#extras">Projects</a></li>
+        </ul>
+      </nav>
+
+      <main id="content">
+        <section>
+          <h2>About This Page</h2>
+          <p>
+            This landing page demonstrates semantic layout with
+            <strong>header</strong>, <strong>nav</strong>, <strong>main</strong>,
+            <strong>aside</strong>, and <strong>footer</strong>.
+          </p>
+          <p>
+            Internal links in the navigation jump to sections by matching IDs.
+          </p>
+        </section>
+
+        <section id="media">
+          <h2>Media</h2>
+          <figure class="card">
+            <img
+              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+              alt="Laptop with code on screen on a desk"
+              width="800"
+            />
+            <figcaption>Workspace setup for web development practice.</figcaption>
+          </figure>
+
+          <article class="card">
+            <h3>Audio Sample</h3>
+            <audio controls>
+              <source src="assets/sample-audio.mp3" type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </article>
+
+          <article class="card">
+            <h3>Video Sample</h3>
+            <video controls width="800">
+              <source src="assets/sample-video.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </article>
+        </section>
+
+        <section id="embed">
+          <h2>Embed</h2>
+          <article class="card">
+            <h3>Featured Tutorial Video</h3>
+            <iframe
+              title="Intro to semantic HTML tutorial"
+              width="800"
+              height="450"
+              src="https://www.youtube.com/embed/kGW8Al_cga4"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </article>
+        </section>
+
+        <section id="extras">
+          <h2>Projects</h2>
+          <article class="card">
+            <h3>Personal Blog Layout</h3>
+            <p>
+              A clean blog homepage built with semantic sections and responsive
+              typography.
+            </p>
+            <a href="#content">Read how the layout is structured</a>
+          </article>
+          <article class="card">
+            <h3>Landing Page Redesign</h3>
+            <p>
+              A marketing page refactor that improved accessibility and heading
+              hierarchy.
+            </p>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener"
+              >View semantic HTML references on MDN</a
+            >
+          </article>
+          <article class="card">
+            <h3>Media Showcase</h3>
+            <p>
+              A section combining image, audio, and video with meaningful
+              captions and fallback text.
+            </p>
+            <a href="#media">Jump to the media section example</a>
+          </article>
+        </section>
+      </main>
+
+      <aside>
+        <h2>Quick Tips</h2>
+        <ul>
+          <li>Use semantic tags to describe the role of content, not its style.</li>
+          <li>Keep heading levels in a logical order for better accessibility.</li>
+          <li>Use meaningful link text so users know where a link leads.</li>
+        </ul>
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Glossary/Semantics#semantics_in_html"
+          target="_blank"
+          rel="noopener"
+          >Read MDN's guide to semantics in HTML</a
+        >
+      </aside>
+
+      <footer>
+        <p class="small">© 2026 Your Name. All rights reserved.</p>
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element"
+          target="_blank"
+          rel="noopener"
+          >Browse all HTML elements on MDN</a
+        >
+      </footer>
+    </div>
+  </body>
+</html>

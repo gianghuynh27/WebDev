@@ -1,0 +1,83 @@
+/*
+  🧠 PROJECT: Profile Card — Basic Selectors
+
+  IMPORTANT:
+  - After each step, save and refresh the browser.
+*/
+
+/* STEP 1 — Universal selector */
+/*
+  Use the universal selector (*) to reset margin and padding.
+  Set box-sizing to border-box.
+*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* STEP 2 — Element selectors */
+/*
+  Style the body element with a font-family and background color.
+  Style the h1 element to change text color.
+*/
+body {
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  font-family: "Courier New", Courier, monospace;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+/* STEP 3 — Class selectors */
+/*
+  Select .card to add padding, border, and width.
+  Select .role to make the text italic.
+  Select .bio to make the text bold.
+*/
+.card{
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers items horizontally */
+  gap: 16px;
+  border:#f0f0f0 solid 1px;
+  padding: 20px; 
+  width: 400px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow:  0 4px 8px rgba(67, 90, 84, 0.1);
+}
+.role{
+  font-style: italic;
+}
+.bio{
+  font-weight: bold;  
+}
+/* STEP 4 — ID selector */
+/*
+  Select #name to increase font size.
+  IDs should be unique.
+*/
+#name {
+  font-size: 24px;
+  font-weight: bold;
+
+  background: linear-gradient(90deg, #ff4d4d, #ffcc00, #33ccff, #ff4d4d);
+  background-size: 300%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: waveColor 4s infinite linear;
+}
+
+@keyframes waveColor {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 300%;
+  }
+}

@@ -1,0 +1,180 @@
+/*
+  🎯 PROJECT: Interactive List
+  TOPIC: Pseudo-classes & Pseudo-elements
+
+  In this file, you will PRACTICE:
+  - Reacting to user interaction using CSS
+  - Targeting elements based on their position
+  - Adding visual content without editing HTML
+  - Styling specific parts of text
+
+  ❗ IMPORTANT RULES
+  - Do NOT write HTML in this file
+  - Write ONLY CSS rules
+  - Follow each step in order
+  - Save and refresh the browser after every step
+*/
+
+/* ===============================
+   STEP 1 — Base List Item Styling
+   =============================== */
+
+/*
+  1. Select ALL <li> elements that are inside the list
+     with class "items".
+  2. Add padding inside each list item.
+  3. This spacing should make the text easier to read
+     and increase the interactive area.
+*/
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  padding: 10px;
+}
+li::before {
+  content: "✨ ";
+}
+/* ===============================
+   STEP 2 — Hover Interaction (:hover)
+   =============================== */
+
+/*
+  1. Use the :hover pseudo-class on the list items.
+  2. Change the background color ONLY while
+     the user’s mouse is over the item.
+  3. This visually shows that the item is interactive.
+*/
+li:hover {
+  background-color: #f0f0f0;
+}
+/* ===============================
+   STEP 3 — Focus Interaction (:focus)
+   =============================== */
+
+/*
+  1. Use the :focus pseudo-class on the list items.
+  2. This style should appear when the item is
+     selected using the keyboard (Tab key).
+  3. Apply a visible outline so users know
+     which item is currently focused.
+  4. NOTE: <li> elements must be focusable in HTML
+     using tabindex="0".
+*/
+/* Make focus visible for keyboard and mouse users.
+    Use :focus-visible for keyboard focus where supported. */
+.items li:focus{
+   outline: 3px solid #007bff;
+   outline-offset: 3px;
+   background-color: #e6f3ff;
+}
+/* ===============================
+   STEP 4 — First Item Styling (:first-child)
+   =============================== */
+
+/*
+  1. Use a pseudo-class to target ONLY the FIRST
+     list item inside the list.
+  2. Make this item visually stronger than the others.
+  3. This is commonly used to highlight priority items.
+*/
+.items li:first-child {
+  font-weight: bold;
+  color: #007bff;
+}
+/* ===============================
+   STEP 5 — Last Item Styling (:last-child)
+   =============================== */
+
+/*
+  1. Use a pseudo-class to target ONLY the LAST
+     list item inside the list.
+  2. Change the text color to make it appear softer
+     or less emphasized.
+  3. This helps create visual hierarchy.
+*/
+.items li:last-child {
+  color: #999;
+}
+/* ===============================
+   STEP 6 — Targeting by Position (:nth-child)
+   =============================== */
+
+/*
+  1. Use a pseudo-class that allows selecting
+     an element by its position in the list.
+  2. Target the SECOND list item.
+  3. Apply a subtle background color.
+  4. Remember: counting starts at 1, not 0.
+*/
+.items li:nth-child(2) {
+  background-color: #9b5d5d;
+}
+/* ===============================
+   STEP 7 — Adding Content Before (::before)
+   =============================== */
+
+/*
+  1. Use a pseudo-element to insert content
+     BEFORE the text of each list item.
+  2. The inserted content should be a symbol
+     or character.
+  3. This content does NOT exist in the HTML.
+  4. Set a color for the inserted content.
+*/
+li::before {
+  content: "✨ ";
+  color: #007bff;
+}
+/* ===============================
+   STEP 8 — Adding Content After (::after)
+   =============================== */
+
+/*
+  1. Use a pseudo-element to insert content
+     AFTER the text of each list item.
+  2. The inserted content should be visually subtle.
+  3. This is often used for icons or indicators.
+*/
+li::after {
+  content: " 🌟";
+  color: #999;
+}
+/* ===============================
+   STEP 9 — Styling the First Letter (::first-letter)
+   =============================== */
+
+/*
+  1. Use a pseudo-element to target ONLY
+     the first letter of each list item.
+  2. Increase the size of the first letter slightly.
+  3. This creates a typographic emphasis effect.
+*/
+li::first-letter {
+  font-size: 1.5em;
+  color: #007bff;
+}
+/* ===============================
+   STEP 10 — Styling the First Line (::first-line)
+   =============================== */
+
+/*
+  1. Use a pseudo-element to target ONLY
+     the first line of text inside each list item.
+  2. Make the first line visually stronger.
+  3. The first line depends on screen size
+     and container width.
+*/
+li::first-line {
+  font-weight: bold;
+  color: #333;
+}
+/*
+  ✅ After completing all steps:
+  - Save the file
+  - Refresh the browser
+  - Test hover with mouse
+  - Test focus with Tab key
+  - Resize the browser to observe ::first-line behavior
+*/

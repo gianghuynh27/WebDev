@@ -1,0 +1,48 @@
+/*
+  🧠 PROJECT: Menu Layout — Combinators
+
+  IMPORTANT:
+  - After each step, save and refresh the browser.
+*/
+
+/* STEP 1 — Descendant combinator */
+/*
+  Select all <a> tags inside .menu using a descendant selector.
+  Change text color.
+*/
+a {
+  font-size: 24px;
+  font-weight: bold;
+
+  background: linear-gradient(90deg, #ff4d4d, #ffcc00, #33ccff, #ff4d4d);
+  background-size: 300%;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: waveColor 4s infinite linear;
+}
+@keyframes waveColor {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 300%;
+  }
+}
+/* STEP 2 — Child combinator */
+/*
+  Use > to select only direct li children of ul.
+  Add padding to those li elements.
+*/
+ul > li {
+  padding: 10px;
+}   
+/* STEP 3 — Adjacent sibling */
+/*
+  Use + to style the li immediately after the first one.
+  Change background color.
+*/
+ul > li + li {
+  background-color: #f0f0f0;
+}
