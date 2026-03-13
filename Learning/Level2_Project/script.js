@@ -144,17 +144,55 @@ const noteList = document.getElementById("notesList");
 let notesArray = JSON.parse(localStorage.getItem("notes")) || [];
 function renderNotes() {
   noteList.innerHTML = "";
+
   notesArray.forEach((note, index) => {
     const noteCard = document.createElement("div");
     noteCard.classList.add("note-card");
-    const noteContent = document.createElement("div");
-    noteContent.classList.add("note-content");
-    noteContent.textContent = note.text;
+
     const noteDate = document.createElement("p");
     noteDate.classList.add("note-date");
     noteDate.textContent = new Date(note.createdAt).toLocaleDateString();
-    noteCard.appendChild(noteContent);
+
+    const noteRow = document.createElement("div");
+    noteRow.classList.add("note-row");
+
+    const noteContent = document.createElement("p");
+    noteContent.classList.add("note-content");
+    noteContent.textContent = note.text;
+
+    const buttonGroup = document.createElement("div");
+    buttonGroup.classList.add("note-buttons");
+
+    const editBtn = document.createElement("button");
+    editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+
+    editBtn.addEventListener("click", () => {
+      const newText = prompt("Edit your note:", note.text);
+      if (newText !== null) {
+        notesArray[index].text = newText.trim();
+        localStorage.setItem("notes", JSON.stringify(notesArray));
+        renderNotes();
+      }
+    });
+
+    deleteBtn.addEventListener("click", () => {
+      notesArray.splice(index, 1);
+      localStorage.setItem("notes", JSON.stringify(notesArray));
+      renderNotes();
+    });
+
+    buttonGroup.appendChild(editBtn);
+    buttonGroup.appendChild(deleteBtn);
+
+    noteRow.appendChild(noteContent);
+    noteRow.appendChild(buttonGroup);
+
     noteCard.appendChild(noteDate);
+    noteCard.appendChild(noteRow);
+
     noteList.appendChild(noteCard);
   });
 }
