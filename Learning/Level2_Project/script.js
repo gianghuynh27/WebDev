@@ -216,3 +216,42 @@ addNoteBtn.addEventListener("click", () => {
   }
 });
 renderNotes();
+
+/*                                  Weather Information                                         */
+const cityInput = document.getElementById("cityInput");
+const getWeatherBtn = document.getElementById("getWeatherBtn");
+const weatherResult = document.getElementById("weatherResult");
+
+getWeatherBtn.addEventListener("click", () => {
+  const city = cityInput.value.trim();
+  if (city) {
+    fetchWeather(city);
+  }
+});
+
+async function fetchWeather(city) {
+  const apiKey = "24334971bc34a92f431468a28b35d316";
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+    city
+  )}&appid=${apiKey}&units=metric`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("City not found");
+    }
+    const data = await response.json();
+    displayWeather(data);
+  } catch (error) {
+    weatherResult.textContent = error.message;
+  }
+}
+
+function displayWeather(data) {
+  const { name, main, weather } = data;
+  weatherResult.innerHTML = `
+    <h2>${name}</h2>
+    <p>Temperature: ${main.temp} °C</p>
+    <p>Condition: ${weather[0].description}</p>
+  `;
+}
