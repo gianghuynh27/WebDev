@@ -285,3 +285,71 @@ section p {
   color: var(--muted);
 }
 
+/* WEATHER PAGE STYLING */
+.weather-card {
+  margin-top: 20px;
+  padding: 20px;
+
+  background: #f8fafc;
+  border-radius: 12px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+
+  max-width: 350px;
+}
+
+.weather-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-header h2 {
+  margin: 0;
+}
+
+.weather-temp {
+  font-size: 40px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.weather-description {
+  text-transform: capitalize;
+  color: #555;
+}
+
+.weather-meta {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+
+  display: flex;
+  justify-content: space-between;
+}
+.weather-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.weather-controls input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.weather-controls button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.weather-controls button:hover {
+  background: #1d4ed8;
+}

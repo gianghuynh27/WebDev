@@ -230,17 +230,20 @@ getWeatherBtn.addEventListener("click", () => {
 });
 
 async function fetchWeather(city) {
-  const apiKey = "24334971bc34a92f431468a28b35d316";
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
-    city
-  )}&appid=${apiKey}&units=metric`;
+  const apiKey = "1bcc78fa08f064e2117b61c95e768e2d";
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
 
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("City not found");
-    }
     const data = await response.json();
+
+    console.log("Status:", response.status);
+    console.log("Response data:", data);
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch weather");
+    }
+
     displayWeather(data);
   } catch (error) {
     weatherResult.textContent = error.message;
@@ -249,9 +252,33 @@ async function fetchWeather(city) {
 
 function displayWeather(data) {
   const { name, main, weather } = data;
+
+  const icon = weather[0].icon;
+
   weatherResult.innerHTML = `
-    <h2>${name}</h2>
-    <p>Temperature: ${main.temp} °C</p>
-    <p>Condition: ${weather[0].description}</p>
+    <div class="weather-card">
+
+      <div class="weather-header">
+        <h2>${name}</h2>
+        <img 
+          src="https://openweathermap.org/img/wn/${icon}@2x.png"
+          alt="weather icon"
+        />
+      </div>
+
+      <div class="weather-temp">
+        ${Math.round(main.temp)}°C
+      </div>
+
+      <div class="weather-description">
+        ${weather[0].description}
+      </div>
+
+      <div class="weather-meta">
+        <div>Feels like: ${Math.round(main.feels_like)}°C</div>
+        <div>Humidity: ${main.humidity}%</div>
+      </div>
+
+    </div>
   `;
 }
