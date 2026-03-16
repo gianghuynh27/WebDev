@@ -221,9 +221,14 @@ renderNotes();
 const cityInput = document.getElementById("cityInput");
 const getWeatherBtn = document.getElementById("getWeatherBtn");
 const weatherResult = document.getElementById("weatherResult");
-
+let savedCity = localStorage.getItem("lastCity");
+if (savedCity) {
+  cityInput.value = savedCity;
+  fetchWeather(savedCity);
+}
 getWeatherBtn.addEventListener("click", () => {
   const city = cityInput.value.trim();
+  localStorage.setItem("lastCity", city);
   if (city) {
     fetchWeather(city);
   }
