@@ -287,3 +287,24 @@ function displayWeather(data) {
     </div>
   `;
 }
+/*                                  Inspirational Quote                                         */
+const quoteSection = document.querySelector(".quoteSection");
+async function fetchQuote() {
+  try {
+    const response = await fetch("https://api.quotable.io/random");
+    const data = await response.json();
+    displayQuote(data);
+  } catch (error) {
+    quoteSection.textContent = "Failed to load quote.";
+  }
+}
+
+function displayQuote(data) {
+  quoteSection.innerHTML = `
+    <div class="quote-card">
+      <p class="quote-text">"${data.content}"</p>
+      <p class="quote-author">- ${data.author}</p>
+    </div>
+  `;
+}
+fetchQuote();

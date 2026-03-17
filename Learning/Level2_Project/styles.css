@@ -1,17 +1,30 @@
 :root {
-  --bg: #f4f7fb;
+  --bg: #eef4fb;
   --card: #ffffff;
-  --accent: #0b78e3;
-  --muted: #6b7280;
+  --text: #0f172a;
+  --muted: #64748b;
+
+  --home-accent: #2563eb;
+  --weather-accent: #06b6d4;
+  --tasks-accent: #22c55e;
+  --notes-accent: #f59e0b;
+  --quote-accent: #8b5cf6;
+
+  --shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
 }
 
 * {
   box-sizing: border-box;
 }
+
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family:
@@ -22,50 +35,45 @@ body {
     Roboto,
     Arial,
     sans-serif;
-  background: var(--bg);
-  color: #0f172a;
+  background: linear-gradient(to bottom, #f8fbff, #eef4fb);
+  color: var(--text);
   padding: 20px;
 }
 
-div {
+.app-shell {
   max-width: 980px;
   margin: 0 auto;
 }
 
 nav {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
+  flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
 nav button {
-  background: transparent;
-  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #dbe7f3;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 999px;
   cursor: pointer;
   font-weight: 600;
-  color: var(--accent);
+  color: #334155;
   transition: all 0.16s ease;
+  box-shadow: 0 4px 10px rgba(16, 24, 40, 0.04);
 }
 
 nav button:hover {
-  background: rgba(11, 120, 227, 0.08);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(16, 24, 40, 0.06);
+  box-shadow: 0 8px 16px rgba(16, 24, 40, 0.08);
 }
 
-/* active / selected state for navigation */
 nav button.active {
-  background: var(--accent);
+  background: #0f172a;
   color: #fff;
-  box-shadow: 0 8px 20px rgba(11, 120, 227, 0.18);
-  transform: translateY(-2px);
-}
-
-nav button.active:hover {
-  opacity: 0.95;
+  border-color: #0f172a;
 }
 
 main {
@@ -74,22 +82,57 @@ main {
 
 section {
   background: var(--card);
-  padding: 22px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
+  padding: 26px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
   margin-bottom: 18px;
+  min-height: calc(100vh - 150px);
+  border-top: 6px solid;
+}
+
+#homeSection {
+  border-top-color: var(--home-accent);
+}
+
+#weatherSection {
+  border-top-color: var(--weather-accent);
+}
+
+#tasksSection {
+  border-top-color: var(--tasks-accent);
+}
+
+#notesSection {
+  border-top-color: var(--notes-accent);
 }
 
 section h1 {
   margin: 0 0 8px 0;
+  font-size: 2rem;
 }
+
+#homeSection h1 {
+  color: var(--home-accent);
+}
+
+#weatherSection h1 {
+  color: var(--weather-accent);
+}
+
+#tasksSection h1 {
+  color: var(--tasks-accent);
+}
+
+#notesSection h1 {
+  color: var(--notes-accent);
+}
+
 section p {
   color: var(--muted);
   line-height: 1.5;
   margin: 0;
 }
 
-/* hide non-home sections by default */
 #weatherSection,
 #tasksSection,
 #notesSection {
@@ -100,17 +143,16 @@ section p {
   body {
     padding: 36px;
   }
+
   nav {
     justify-content: flex-start;
   }
 }
 
-/* small helpers */
 .muted {
   color: var(--muted);
 }
 
-/* top-left date */
 #pageDate {
   left: 12px;
   top: 10px;
@@ -120,7 +162,7 @@ section p {
   padding: 4px 6px;
 }
 
-/* TASK PAGE STYLING */
+/* TASK PAGE */
 .task-input {
   display: flex;
   gap: 10px;
@@ -130,18 +172,20 @@ section p {
 #taskInput {
   flex: 1;
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
   font-size: 14px;
+  background: #fafffc;
 }
 
 #addTaskBtn {
   padding: 10px 16px;
   border: none;
-  background: var(--accent);
+  background: var(--tasks-accent);
   color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 #taskList {
@@ -155,23 +199,26 @@ section p {
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background: #f8fafc;
-  border-radius: 8px;
+  background: #f0fdf4;
+  border-radius: 10px;
   margin-bottom: 10px;
+  border-left: 4px solid var(--tasks-accent);
 }
+
 #taskList li:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.08);
 }
-/* Ensure task content takes up available space and has some margin from the buttons. */
+
 .task-content {
   flex: 1;
   margin-right: 12px;
 }
-/* Prevent long task text from breaking the layout by allowing it to wrap and break words if necessary. */
+
 .task-content span {
   word-break: break-word;
 }
+
 .task-buttons {
   display: flex;
   gap: 8px;
@@ -188,6 +235,7 @@ section p {
   align-items: center;
   justify-content: center;
 }
+
 .fa-check {
   color: #22c55e;
 }
@@ -195,16 +243,9 @@ section p {
 .fa-trash {
   color: #ef4444;
 }
+
 #taskList button:hover {
   transform: scale(1.1);
-}
-.delete-btn {
-  border: none;
-  background: #ef4444;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
 }
 
 #taskList li.completed {
@@ -212,7 +253,7 @@ section p {
   color: #166534;
 }
 
-/* NOTES PAGE STYLING */
+/* NOTES PAGE */
 .notes-input-area {
   display: flex;
   flex-direction: column;
@@ -223,21 +264,23 @@ section p {
 #noteInput {
   min-height: 120px;
   padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
   font-size: 14px;
   font-family: inherit;
   resize: vertical;
+  background: #fffdf7;
 }
 
 #addNoteBtn {
   align-self: flex-start;
   padding: 10px 16px;
   border: none;
-  background: var(--accent);
+  background: var(--notes-accent);
   color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 #notesList {
@@ -245,16 +288,19 @@ section p {
   flex-direction: column;
   gap: 12px;
 }
+
 .note-card {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  background: #f8fafc;
-  border-radius: 10px;
+  background: #fffbeb;
+  border-radius: 12px;
   padding: 14px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.08);
+  border-left: 4px solid var(--notes-accent);
 }
+
 .note-row {
   padding: 0;
   margin: 0;
@@ -262,12 +308,14 @@ section p {
   justify-content: space-between;
   align-items: center;
 }
+
 .note-content {
   flex: 1;
   text-align: left;
   white-space: pre-wrap;
   word-break: break-word;
 }
+
 .note-buttons {
   display: flex;
   gap: 8px;
@@ -280,22 +328,49 @@ section p {
   cursor: pointer;
   font-size: 16px;
 }
+
 .note-date {
   font-size: 12px;
   color: var(--muted);
 }
 
-/* WEATHER PAGE STYLING */
+/* WEATHER PAGE */
+.weather-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.weather-controls input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #a5f3fc;
+  background: #f0fdff;
+}
+
+.weather-controls button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--weather-accent);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.weather-controls button:hover {
+  background: #0891b2;
+}
+
 .weather-card {
   margin-top: 20px;
   padding: 20px;
-
-  background: #f8fafc;
-  border-radius: 12px;
-
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-
-  max-width: 350px;
+  background: linear-gradient(to bottom right, #ecfeff, #f0f9ff);
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(6, 182, 212, 0.08);
+  border-left: 4px solid var(--weather-accent);
+  max-width: 100%;
 }
 
 .weather-header {
@@ -306,50 +381,59 @@ section p {
 
 .weather-header h2 {
   margin: 0;
+  color: #0f172a;
 }
 
 .weather-temp {
   font-size: 40px;
-  font-weight: 600;
+  font-weight: 700;
   margin: 10px 0;
+  color: #164e63;
 }
 
 .weather-description {
   text-transform: capitalize;
-  color: #555;
+  color: #0f766e;
 }
 
 .weather-meta {
   margin-top: 10px;
   font-size: 14px;
-  color: #666;
-
+  color: #155e75;
   display: flex;
   justify-content: space-between;
-}
-.weather-controls {
-  display: flex;
   gap: 10px;
-  margin-top: 12px;
+  flex-wrap: wrap;
 }
 
-.weather-controls input {
-  flex: 1;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+/* QUOTE SECTION */
+.quoteSection {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
-.weather-controls button {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+.quote-card {
+  width: 100%;
+  padding: 24px 28px;
+  background: linear-gradient(to bottom right, #f5f3ff, #faf5ff);
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(139, 92, 246, 0.08);
+  text-align: center;
+  border-left: 4px solid var(--quote-accent);
 }
 
-.weather-controls button:hover {
-  background: #1d4ed8;
+.quote-text {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #312e81;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.quote-author {
+  font-size: 14px;
+  color: #6d28d9;
+  font-weight: 600;
 }
