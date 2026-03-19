@@ -4,12 +4,13 @@ const home = document.getElementById("homeBtn");
 const weather = document.getElementById("weatherBtn");
 const tasks = document.getElementById("tasksBtn");
 const notes = document.getElementById("notesBtn");
+const contact = document.getElementById("contactBtn");
 //Get the sections
 const homeSection = document.getElementById("homeSection");
 const weatherSection = document.getElementById("weatherSection");
 const tasksSection = document.getElementById("tasksSection");
 const notesSection = document.getElementById("notesSection");
-
+const contactSection = document.getElementById("contactSection");
 //Add event listeners to the buttons
 function showSection(section, activeSection) {
   //Hide all sections
@@ -17,11 +18,13 @@ function showSection(section, activeSection) {
   weatherSection.style.display = "none";
   tasksSection.style.display = "none";
   notesSection.style.display = "none";
+  contactSection.style.display = "none";
   //Deselect all buttons
   home.classList.remove("active");
   weather.classList.remove("active");
   tasks.classList.remove("active");
   notes.classList.remove("active");
+  contact.classList.remove("active");
   //Show the selected section
   section.style.display = "block";
   activeSection.classList.add("active");
@@ -31,6 +34,7 @@ home.addEventListener("click", () => showSection(homeSection, home));
 weather.addEventListener("click", () => showSection(weatherSection, weather));
 tasks.addEventListener("click", () => showSection(tasksSection, tasks));
 notes.addEventListener("click", () => showSection(notesSection, notes));
+contact.addEventListener("click", () => showSection(contactSection, contact));
 
 //Show the home section by default
 showSection(homeSection, home);
@@ -308,3 +312,27 @@ function displayQuote(data) {
   `;
 }
 fetchQuote();
+/*                                  Contact Information                                         */
+const sendMessageBtn = document.getElementById("sendMessageBtn");
+let messageArray = JSON.parse(localStorage.getItem("messages")) || [];
+sendMessageBtn.addEventListener("click", () => {
+  const name = document.getElementById("nameInput").value.trim();
+  const email = document.getElementById("emailInput").value.trim();
+  const message = document.getElementById("messageInput").value.trim();
+  if (name && email && message) {
+    alert("Message sent! Thank you for contacting us.");
+    document.getElementById("nameInput").value = "";
+    document.getElementById("emailInput").value = "";
+    document.getElementById("messageInput").value = "";
+    messageArray.push({
+      name,
+      email,
+      message,
+      sentAt: new Date().toISOString(),
+    });
+    localStorage.setItem("messages", JSON.stringify(messageArray));
+  } else {
+    alert("Please fill in all fields before sending.");
+  }
+});
+console.log("Saved messages:", messageArray);
