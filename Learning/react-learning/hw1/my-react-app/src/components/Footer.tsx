@@ -1,7 +1,7 @@
 export default function Footer(){
     return (
-        <footer>
-            <p>&copy; 2024 My Website. All rights reserved.</p>
-        </footer>
+        <footer className="text-center py-6 text-gray-400">
+      © {new Date().getFullYear()} AniWatch
+    </footer>
     )
 }

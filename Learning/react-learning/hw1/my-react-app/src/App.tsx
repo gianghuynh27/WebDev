@@ -5,7 +5,7 @@ import Navbar from './components/Navbar'
 
 function App() {
   return(
-    <div>
+   <div className="min-h-screen bg-gradient-to-r from-[#060b16] via-[#08101d] to-[#060b16] text-white">
       <Navbar />
       <HeroSection />
       <Footer />
