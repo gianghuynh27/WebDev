@@ -1,14 +1,17 @@
 import type { TftComp } from "../types/tft";
+import { getTraitCounts } from "../utils/countTraits";
+import { populateCompUnit } from "../utils/populateCompUnits";
 
 type CompCardProps = {
   comp: TftComp;
 };
 
-function CompCard({comp}: CompCardProps) {
+function CompCard({ comp }: CompCardProps) {
+  const units = populateCompUnit(comp)
+
+  const traitCounts = getTraitCounts(units);
   return (
-    <div
-      className="grid grid-cols-[90px_1.5fr_2fr_1.5fr] items-center gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow hover:border-cyan-500/40 hover:bg-slate-900 transition"
-    >
+    <div className="grid grid-cols-[90px_1.5fr_2fr_1.5fr] items-center gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow hover:border-cyan-500/40 hover:bg-slate-900 transition">
       {/* Tier */}
       <div className="flex justify-center">
         <span
@@ -66,27 +69,48 @@ function CompCard({comp}: CompCardProps) {
         </div>
       </div>
 
-      {/* Champions + Traits */}
+      {/* Traits + Champions */}
       <div className="space-y-2">
-        <div className="flex flex-wrap gap-2">
-          {comp.champions.map((champion) => (
+        {/* Traits row */}
+        <div className="flex flex-wrap gap-1">
+          {Object.entries(traitCounts).map(([trait, count]) => (
             <span
-              key={champion}
-              className="rounded-md bg-slate-800 px-2 py-1 text-sm text-slate-200"
+              key={trait}
+              className="rounded-md border border-orange-400/40 bg-slate-800 px-2 py-0.5 text-xs font-medium text-orange-300"
             >
-              {champion}
+              {count} {trait}
             </span>
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {comp.traits.map((trait) => (
-            <span
-              key={trait}
-              className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 text-xs text-cyan-300"
-            >
-              {trait}
-            </span>
+        {/* Units row */}
+        <div className="flex flex-wrap gap-3">
+          {units.map((unit) => (
+            <div key={unit.id} className="w-14 text-center">
+              <div className="relative h-12 w-12 rounded-md border border-yellow-500 bg-slate-800">
+                <div className="flex h-full w-full items-center justify-center text-xs font-bold text-slate-300">
+                  {unit.name.slice(0, 2)}
+                </div>
+
+                {unit.items.length > 0 && (
+                  <div className="absolute -bottom-1 left-0 flex gap-0.5">
+                    {unit.items.slice(0, 3).map((item) => (
+                      <div
+                        key={item}
+                        title={item}
+                        className="h-4 w-4 rounded-sm border border-slate-900 bg-amber-500 text-[8px]"
+                      >
+                        {item.slice(0, 1)}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <p className="mt-1 truncate text-[11px] text-slate-300">
+                {unit.name}
+              </p>
+            </div>
           ))}
         </div>
       </div>
