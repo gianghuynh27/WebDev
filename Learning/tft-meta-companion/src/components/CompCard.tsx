@@ -1,6 +1,7 @@
 import type { TftComp } from "../types/tft";
 import { getTraitCounts } from "../utils/countTraits";
 import { populateCompUnit } from "../utils/populateCompUnits";
+import Pill, { type PillVariant } from "./Pill";
 
 type CompCardProps = {
   comp: TftComp;
@@ -53,18 +54,10 @@ function CompCard({ comp }: CompCardProps) {
               {comp.type}
             </span>
 
-            {/* Difficulty */}
-            <span
-              className={`rounded-md border px-2 py-1 text-xs font-medium ${
-                comp.difficulty === "Easy"
-                  ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-                  : comp.difficulty === "Medium"
-                    ? "border-yellow-400/20 bg-yellow-400/10 text-yellow-200"
-                    : "border-red-400/20 bg-red-400/10 text-red-200"
-              }`}
-            >
+            {/* Difficulty */}      
+            <Pill variant={comp.difficulty.toLowerCase() as PillVariant}>
               {comp.difficulty}
-            </span>
+            </Pill>
           </div>
         </div>
       </div>
@@ -74,12 +67,9 @@ function CompCard({ comp }: CompCardProps) {
         {/* Traits row */}
         <div className="flex flex-wrap gap-1">
           {Object.entries(traitCounts).map(([trait, count]) => (
-            <span
-              key={trait}
-              className="rounded-md border border-orange-400/40 bg-slate-800 px-2 py-0.5 text-xs font-medium text-orange-300"
-            >
-              {count} {trait}
-            </span>
+            <Pill key = {trait} variant="trait">
+                {count} {trait}
+              </Pill>
           ))}
         </div>
 
