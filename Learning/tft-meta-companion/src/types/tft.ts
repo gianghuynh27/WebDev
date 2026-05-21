@@ -1,5 +1,3 @@
-import type { Unit } from "./unit";
-
 export type CompTier = 'S' | 'A' | 'B' | 'C';
 export type CompUnit = {
   unitId: number;

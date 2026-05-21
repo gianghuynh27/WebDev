@@ -8,11 +8,11 @@ type CompCardProps = {
 };
 
 function CompCard({ comp }: CompCardProps) {
-  const units = populateCompUnit(comp)
+  const units = populateCompUnit(comp);
 
   const traitCounts = getTraitCounts(units);
   return (
-    <div className="grid grid-cols-[90px_1.5fr_2fr_1.5fr] items-center gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow hover:border-cyan-500/40 hover:bg-slate-900 transition">
+    <div className="grid gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow transition hover:border-cyan-500/40 hover:bg-slate-900 lg:grid-cols-[90px_1.5fr_2fr_1.5fr] lg:items-center">
       {/* Tier */}
       <div className="flex justify-center">
         <span
@@ -54,7 +54,7 @@ function CompCard({ comp }: CompCardProps) {
               {comp.type}
             </span>
 
-            {/* Difficulty */}      
+            {/* Difficulty */}
             <Pill variant={comp.difficulty.toLowerCase() as PillVariant}>
               {comp.difficulty}
             </Pill>
@@ -67,13 +67,13 @@ function CompCard({ comp }: CompCardProps) {
         {/* Traits row */}
         <div className="flex flex-wrap gap-1">
           {Object.entries(traitCounts).map(([trait, count]) => (
-            <Pill key = {trait} variant="trait">
-                {count} {trait}
-              </Pill>
+            <Pill key={trait} variant="trait">
+              {count} {trait}
+            </Pill>
           ))}
         </div>
 
-        {/* Units row */}
+        {/* Recommended augments */}
         <div className="flex flex-wrap gap-3">
           {units.map((unit) => (
             <div key={unit.id} className="w-14 text-center">
@@ -102,6 +102,22 @@ function CompCard({ comp }: CompCardProps) {
               </p>
             </div>
           ))}
+        </div>
+        {/* Units row */}
+        <div className="flex flex-wrap gap-3">
+          <div className="space-y-1">
+            <p className="text-xs font-medium uppercase text-slate-500">
+              Recommended Augments
+            </p>
+
+            <div className="flex flex-wrap gap-1">
+              {comp.recommendedAugments.map((augment) => (
+                <Pill key={augment} variant="augment">
+                  {augment}
+                </Pill>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
