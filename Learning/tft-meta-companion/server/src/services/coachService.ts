@@ -1,9 +1,11 @@
 import OpenAI from "openai";
 import type { CoachRequest, CoachResponse } from "../types/coach";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function createOpenAIClient() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
 
 function getMockCoachRecommendation(request: CoachRequest): CoachResponse {
   return {
@@ -61,6 +63,7 @@ export async function getCoachRecommendation(
   }
 
   const model = process.env.OPENAI_MODEL ?? "gpt-5.4-mini";
+  const client = createOpenAIClient();
 
   const response = await client.responses.create({
     model,
