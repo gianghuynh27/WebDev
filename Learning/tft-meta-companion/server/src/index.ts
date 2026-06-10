@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import coachRoutes from "./routes/coachRoutes";
 import authRoutes from "./routes/authRoutes";
-
+import staticDataRoutes from "./routes/staticDataRoutes"
 
 const app = express();
 const port = process.env.PORT ?? 4000;
@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/coach", coachRoutes);
 app.use("/api/auth", authRoutes)
+app.use("/api/static", staticDataRoutes)
 app.get("/", (_req, res) => {
   res.json({ status: "ok" });
 });
