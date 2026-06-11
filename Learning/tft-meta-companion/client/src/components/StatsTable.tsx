@@ -5,6 +5,7 @@ import StatEntityCell from "./StatEntityCell";
 export type StatsTableRow = {
   id: string;
   name: string;
+  imageUrl?: string;
   rank: StatRank;
   pickRate: number;
   top4Rate: number;
@@ -35,7 +36,7 @@ function StatsTable({ nameHeader, rows }: StatsTableProps) {
         <tbody className="divide-y divide-slate-800">
           {rows.map((row) => (
             <tr key={row.id} className="hover:bg-slate-900/60">
-              <td className="px-4 py-3 text-white"><StatEntityCell name={row.name} /></td>
+              <td className="px-4 py-3 text-white"><StatEntityCell name={row.name}  imageUrl={row.imageUrl}/></td>
               <td className="px-4 py-3">
                 <RankBadge rank={row.rank} />
               </td>

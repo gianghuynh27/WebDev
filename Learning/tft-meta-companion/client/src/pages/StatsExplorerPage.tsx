@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import AugmentTierList from "../components/AugmentTierList";
 import StatsTable, { type StatsTableRow } from "../components/StatsTable";
-import { mockAugments, mockChampions, mockItems } from "../data/mockStats";
-import { mockUnits } from "../data/mockUnits";
+import { mockAugments, mockItems } from "../data/mockStats";
+import {
+  getStaticChampions,
+  type StaticChampion,
+} from "../services/staticDataApi";
+
 
 function StatsExplorerPage() {
+  const [champions, setChampions] = useState<StaticChampion[]>([]);
+  const [isLoadingChampions, setIsLoadingChampions] = useState(false);
+  const [championsError, setChampionsError] = useState("");
   type StatsTab = "augments" | "champions" | "items";
   const tabs: { label: string; value: StatsTab }[] = [
     { label: "Augments", value: "augments" },
@@ -13,20 +20,33 @@ function StatsExplorerPage() {
     { label: "Items", value: "items" },
   ];
   const [activeTab, setActiveTab] = useState<StatsTab>("augments");
+  useEffect(() => {
+    async function loadChampions() {
+      setIsLoadingChampions(true);
+      setChampionsError("");
 
-  const championRows: StatsTableRow[] = mockChampions.map((champion) => {
-    const unit = mockUnits.find((mockUnit) => mockUnit.id === champion.unitId);
+      try {
+        const result = await getStaticChampions();
+        setChampions(result);
+      } catch {
+        setChampionsError("Could not load current TFT champions.");
+      } finally {
+        setIsLoadingChampions(false);
+      }
+    }
 
-    return {
-      id: String(champion.unitId),
-      name: unit?.name ?? `Unit #${champion.unitId}`,
-      rank: champion.rank,
-      pickRate: champion.pickRate,
-      top4Rate: champion.top4Rate,
-      winRate: champion.winRate,
-      avgPlacement: champion.avgPlacement,
-    };
-  });
+    loadChampions();
+  }, []);
+  const championRows: StatsTableRow[] = champions.map((champion) => ({
+    id: champion.id,
+    name: `${champion.name} (${champion.cost} cost)`,
+    imageUrl: champion.imageUrl,
+    rank: "B",
+    pickRate: 0,
+    top4Rate: 0,
+    winRate: 0,
+    avgPlacement: 0,
+  }));
 
   const itemRows: StatsTableRow[] = mockItems.map((item) => ({
     id: item.id,
@@ -60,14 +80,30 @@ function StatsExplorerPage() {
           </button>
         ))}
       </div>
-       {
-        activeTab === "augments" && <AugmentTierList augments={mockAugments} />
-       }
+      {activeTab === "augments" && <AugmentTierList augments={mockAugments} />}
       {activeTab === "champions" && (
-        <StatsTable nameHeader="Unit" rows={championRows} />
+        <>
+          {isLoadingChampions && (
+            <p className="mt-6 text-sm text-slate-400">
+              Loading current champions...
+            </p>
+          )}
+
+          {championsError && (
+            <p className="mt-6 rounded-md border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+              {championsError}
+            </p>
+          )}
+
+          {!isLoadingChampions && !championsError && (
+            <StatsTable nameHeader="Unit" rows={championRows} />
+          )}
+        </>
       )}
 
-      {activeTab === "items" && <StatsTable nameHeader="Item" rows={itemRows} />}
+      {activeTab === "items" && (
+        <StatsTable nameHeader="Item" rows={itemRows} />
+      )}
     </div>
   );
 }

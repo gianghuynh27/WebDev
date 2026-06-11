@@ -56,9 +56,9 @@ function getLatestSet(data: CommunityDragonTftData) {
     throw new Error("No TFT set data found");
   }
 
-  return data.setData.reduce((latestSet, currentSet)=>{
+  return data.setData.reduce((latestSet, currentSet) => {
     return currentSet.number > latestSet.number ? currentSet : latestSet;
-  })
+  });
 }
 async function fetchCommunityDragonTftData(): Promise<CommunityDragonTftData> {
   const response = await fetch(COMMUNITY_DRAGON_TFT_URL);
@@ -69,11 +69,32 @@ async function fetchCommunityDragonTftData(): Promise<CommunityDragonTftData> {
 
   return response.json();
 }
+function getEntityId(entity: CommunityDragonImageEntity) {
+  return entity.apiName ?? String(entity.id);
+}
 
+function getAugmentTier(
+  augment: CommunityDragonImageEntity,
+): StaticAugment["tier"] | undefined {
+  const text = [augment.apiName, augment.id, augment.name, augment.icon]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  if (text.includes("prismatic")) return "prismatic";
+  if (text.includes("gold")) return "gold";
+  if (text.includes("silver")) return "silver";
+
+  return undefined;
+}
 export async function inspectStaticDataShape() {
   const data = await fetchCommunityDragonTftData();
 
   const setData = data as Record<string, unknown>;
+  const firstSet =
+    Array.isArray(setData.setData) && setData.setData.length > 0
+      ? (setData.setData[0] as Record<string, unknown>)
+      : null;
 
   return {
     topLevelKeys: Object.keys(data),
@@ -101,6 +122,8 @@ export async function inspectStaticDataShape() {
             number?: unknown;
             champions?: unknown[];
             augments?: unknown[];
+            augmentSample?: Record<string, unknown>;
+            itemSample?: Record<string, unknown>;
           };
 
           return {
@@ -115,6 +138,17 @@ export async function inspectStaticDataShape() {
           };
         })
       : null,
+    augmentExample:
+      firstSet &&
+      Array.isArray(firstSet.augments) &&
+      firstSet.augments.length > 0
+        ? Object.keys(firstSet.augments[0])
+        : null,
+
+    itemExample:
+      firstSet && Array.isArray(firstSet.items) && firstSet.items.length > 0
+        ? Object.keys(firstSet.items[0])
+        : null,
   };
 }
 
@@ -130,4 +164,33 @@ export async function getStaticChampions(): Promise<StaticChampion[]> {
       traits: champion.traits ?? [],
       imageUrl: toCommunityDragonAssetUrl(champion.icon),
     }));
+}
+
+export async function getStaticItems(): Promise<StaticItem[]> {
+  const data = await fetchCommunityDragonTftData();
+  const latestSet = getLatestSet(data);
+  console.log(latestSet.items);
+  return (latestSet.items ?? [])
+    .filter((item) => (item.apiName || item.id) && item.name)
+    .map((item) => ({
+      id: getEntityId(item),
+      name: item.name ?? "Unknown",
+      imageUrl: toCommunityDragonAssetUrl(item.icon),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function getStaticAugments(): Promise<StaticAugment[]> {
+  const data = await fetchCommunityDragonTftData();
+  const latestSet = getLatestSet(data);
+
+  return (latestSet.augments ?? [])
+    .filter((augment) => (augment.apiName || augment.id) && augment.name)
+    .map((augment) => ({
+      id: getEntityId(augment),
+      name: augment.name ?? "Unknown",
+      imageUrl: toCommunityDragonAssetUrl(augment.icon),
+      tier: getAugmentTier(augment),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
