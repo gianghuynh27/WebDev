@@ -17,6 +17,8 @@ type CommunityDragonImageEntity = {
   id?: string | number;
   name?: string;
   icon?: string;
+  desc?: string;
+  effects?: Record<string, number | string>;
 };
 
 type CommunityDragonChampion = CommunityDragonImageEntity & {
@@ -27,9 +29,9 @@ type CommunityDragonChampion = CommunityDragonImageEntity & {
 type CommunityDragonSetData = {
   number: number;
   name?: string;
-  augments?: CommunityDragonImageEntity[];
+  augments?: string[];
   champions?: CommunityDragonChampion[];
-  items?: CommunityDragonImageEntity[];
+  items?: string[];
 };
 
 type CommunityDragonTftData = {
@@ -89,13 +91,13 @@ function getAugmentTier(
 }
 export async function inspectStaticDataShape() {
   const data = await fetchCommunityDragonTftData();
-
+  const latestSet = data.setData ? getLatestSet(data) : null;
   const setData = data as Record<string, unknown>;
-  const firstSet =
-    Array.isArray(setData.setData) && setData.setData.length > 0
-      ? (setData.setData[0] as Record<string, unknown>)
-      : null;
+  const augmentIds = new Set(latestSet?.augments ?? []);
 
+  const augmentObjects = (data.items ?? []).filter((item) =>
+    augmentIds.has(getEntityId(item)),
+  );
   return {
     topLevelKeys: Object.keys(data),
     itemsType: Array.isArray(data.items) ? "array" : typeof data.items,
@@ -138,17 +140,25 @@ export async function inspectStaticDataShape() {
           };
         })
       : null,
-    augmentExample:
-      firstSet &&
-      Array.isArray(firstSet.augments) &&
-      firstSet.augments.length > 0
-        ? Object.keys(firstSet.augments[0])
+    latestSetSummary: latestSet
+      ? {
+          name: latestSet.name,
+          number: latestSet.number,
+          championCount: latestSet.champions?.length ?? 0,
+          itemCount: latestSet.items?.length ?? 0,
+          augmentCount: latestSet.augments?.length ?? 0,
+          itemSample: latestSet.items?.[0] ?? null,
+          augmentSample: latestSet.augments?.[0] ?? null,
+        }
+      : null,
+    augmentObjectCount: augmentObjects.length,
+
+    augmentObjectKeys:
+      augmentObjects.length > 0
+        ? Object.keys(augmentObjects[0] as Record<string, unknown>)
         : null,
 
-    itemExample:
-      firstSet && Array.isArray(firstSet.items) && firstSet.items.length > 0
-        ? Object.keys(firstSet.items[0])
-        : null,
+    augmentObjectSample: augmentObjects.length > 0 ? augmentObjects[0] : null,
   };
 }
 
@@ -169,9 +179,17 @@ export async function getStaticChampions(): Promise<StaticChampion[]> {
 export async function getStaticItems(): Promise<StaticItem[]> {
   const data = await fetchCommunityDragonTftData();
   const latestSet = getLatestSet(data);
-  console.log(latestSet.items);
-  return (latestSet.items ?? [])
-    .filter((item) => (item.apiName || item.id) && item.name)
+
+  const itemIds = new Set(latestSet.items ?? []);
+
+  return (data.items ?? [])
+    .filter((item) => itemIds.has(getEntityId(item)))
+    .filter(
+      (item) =>
+        getEntityId(item).toLowerCase().includes("tft_item") ||
+        getEntityId(item).toLowerCase().includes("tft5_item"),
+    )
+    .filter((item) => item.name && item.name !== "None")
     .map((item) => ({
       id: getEntityId(item),
       name: item.name ?? "Unknown",
@@ -179,18 +197,44 @@ export async function getStaticItems(): Promise<StaticItem[]> {
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
+function formatDescription(
+  description?: string,
+  effects?: Record<string, number | string>,
+) {
+  if (!description) {
+    return undefined;
+  }
 
+  if (!effects) {
+    return description;
+  }
+
+  return description.replace(/@([^@]+)@/g, (_match, key) => {
+    const value = effects[key];
+
+    return value === undefined ? key : String(value);
+  });
+}
 export async function getStaticAugments(): Promise<StaticAugment[]> {
   const data = await fetchCommunityDragonTftData();
   const latestSet = getLatestSet(data);
 
-  return (latestSet.augments ?? [])
-    .filter((augment) => (augment.apiName || augment.id) && augment.name)
+  const augmentIds = new Set(latestSet.augments ?? []);
+
+  return (data.items ?? [])
+    .filter((item) => augmentIds.has(getEntityId(item)))
+     .filter(
+      (item) =>
+        getEntityId(item).toLowerCase().includes("tft_augment") ||
+        getEntityId(item).toLowerCase().includes("tft17_augment"),
+    )
+    .filter((item) => (item.apiName || item.id) && item.name)
     .map((augment) => ({
       id: getEntityId(augment),
       name: augment.name ?? "Unknown",
       imageUrl: toCommunityDragonAssetUrl(augment.icon),
       tier: getAugmentTier(augment),
+      description: formatDescription(augment.desc, augment.effects),
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }

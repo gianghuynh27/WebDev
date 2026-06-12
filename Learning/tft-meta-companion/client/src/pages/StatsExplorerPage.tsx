@@ -6,13 +6,23 @@ import { mockAugments, mockItems } from "../data/mockStats";
 import {
   getStaticChampions,
   type StaticChampion,
+  getStaticItems,
+  type StaticItem,
+  getStaticAugments,
+  type StaticAugment,
 } from "../services/staticDataApi";
-
+import type { AugmentStat } from "../types/stats";
 
 function StatsExplorerPage() {
   const [champions, setChampions] = useState<StaticChampion[]>([]);
   const [isLoadingChampions, setIsLoadingChampions] = useState(false);
   const [championsError, setChampionsError] = useState("");
+  const [items, setItems] = useState<StaticItem[]>([]);
+  const [isLoadingItems, setIsLoadingItems] = useState(false);
+  const [itemsError, setItemsError] = useState("");
+  const [augments, setAugments] = useState<StaticAugment[]>([]);
+  const [isLoadingAugments, setIsLoadingAugments] = useState(false);
+  const [augmentsError, setAugmentsError] = useState("");
   type StatsTab = "augments" | "champions" | "items";
   const tabs: { label: string; value: StatsTab }[] = [
     { label: "Augments", value: "augments" },
@@ -36,6 +46,36 @@ function StatsExplorerPage() {
     }
 
     loadChampions();
+    async function loadItems() {
+      setIsLoadingItems(true);
+      setItemsError("");
+
+      try {
+        const result = await getStaticItems();
+        setItems(result);
+      } catch {
+        setItemsError("Could not load current TFT items.");
+      } finally {
+        setIsLoadingItems(false);
+      }
+    }
+
+    loadItems();
+    async function loadAugments() {
+      setIsLoadingAugments(true);
+      setItemsError("");
+
+      try {
+        const result = await getStaticAugments();
+        setAugments(result);
+      } catch {
+        setAugmentsError("Could not load current TFT items.");
+      } finally {
+        setIsLoadingAugments(false);
+      }
+    }
+
+    loadAugments();
   }, []);
   const championRows: StatsTableRow[] = champions.map((champion) => ({
     id: champion.id,
@@ -48,16 +88,24 @@ function StatsExplorerPage() {
     avgPlacement: 0,
   }));
 
-  const itemRows: StatsTableRow[] = mockItems.map((item) => ({
+  const itemRows: StatsTableRow[] = items.map((item) => ({
     id: item.id,
     name: item.name,
-    rank: item.rank,
-    pickRate: item.pickRate,
-    top4Rate: item.top4Rate,
-    winRate: item.winRate,
-    avgPlacement: item.avgPlacement,
+    imageUrl: item.imageUrl,
+    rank: "B",
+    pickRate: 0,
+    top4Rate: 0,
+    winRate: 0,
+    avgPlacement: 0,
   }));
-
+  const augmentRows: AugmentStat[] = augments.map((augment) => ({
+    id: augment.id,
+    name: augment.name,
+    tier: augment.tier,
+    imageUrl: augment.imageUrl,
+    description: augment.description,
+    rank: "B",
+  }));
   return (
     <div>
       <PageHeader
@@ -80,7 +128,7 @@ function StatsExplorerPage() {
           </button>
         ))}
       </div>
-      {activeTab === "augments" && <AugmentTierList augments={mockAugments} />}
+      {activeTab === "augments" && <AugmentTierList augments={augmentRows} />}
       {activeTab === "champions" && (
         <>
           {isLoadingChampions && (
@@ -102,7 +150,23 @@ function StatsExplorerPage() {
       )}
 
       {activeTab === "items" && (
-        <StatsTable nameHeader="Item" rows={itemRows} />
+        <>
+          {isLoadingItems && (
+            <p className="mt-6 text-sm text-slate-400">
+              Loading current items...
+            </p>
+          )}
+
+          {itemsError && (
+            <p className="mt-6 rounded-md border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+              {itemsError}
+            </p>
+          )}
+
+          {!isLoadingItems && !itemsError && (
+            <StatsTable nameHeader="Item" rows={itemRows} />
+          )}
+        </>
       )}
     </div>
   );

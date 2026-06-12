@@ -4,8 +4,10 @@ export type StatRank = 'S' | 'A' | 'B' | 'C' | 'D';
 export type AugmentStat = {
   id: string;
   name: string;
-  tier: AugmentTier;
+  tier?: AugmentTier;
   rank: StatRank;
+  imageUrl?: string;
+  description?: string;
 };
 
 export type ChampionStat = {

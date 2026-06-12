@@ -17,4 +17,7 @@ export type StaticAugment = {
   name: string;
   imageUrl?: string;
   tier?: 'silver' | 'gold' | 'prismatic';
+  description?: string;
+  effects?: Record<string, number | string>;
+
 };
