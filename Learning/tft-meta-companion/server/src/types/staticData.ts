@@ -19,5 +19,5 @@ export type StaticAugment = {
   tier?: 'silver' | 'gold' | 'prismatic';
   description?: string;
   effects?: Record<string, number | string>;
-
+  tags?: string[];
 };

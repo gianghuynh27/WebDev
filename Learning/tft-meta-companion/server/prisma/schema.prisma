@@ -19,3 +19,20 @@ model User{
   createdAt     DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+
+model MetaComp {
+  id                  String   @id @default(uuid())
+  name                String
+  tier                String
+  difficulty          String
+  type                String
+  plannerUrl          String?
+  avgPlacement        Float?
+  top4Rate            Float?
+  winRate             Float?
+  playRate            Float?
+  units               Json
+  recommendedAugments Json
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

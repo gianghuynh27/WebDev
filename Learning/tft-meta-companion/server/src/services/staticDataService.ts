@@ -20,6 +20,7 @@ type CommunityDragonImageEntity = {
   composition?: string[];
   desc?: string;
   effects?: Record<string, number | string>;
+  tags?: string[];
 };
 
 type CommunityDragonChampion = CommunityDragonImageEntity & {
@@ -170,8 +171,8 @@ export async function getStaticChampions(): Promise<StaticChampion[]> {
     .filter((champion) => champion.apiName && champion.name)
     .filter(
       (champion) =>
-        champion.apiName?.toLocaleLowerCase().includes("tft17") &&
-        (champion.traits?.length ?? 0) > 0,
+        (champion.apiName?.toLocaleLowerCase().includes("tft17") &&
+        (champion.traits?.length ?? 0) > 0) || (champion.apiName?.toLocaleLowerCase().includes("tft17_summon")),
     )
     .map((champion) => ({
       id: champion.apiName ?? String(champion.id),
@@ -196,7 +197,9 @@ export async function getStaticItems(): Promise<StaticItem[]> {
       (item) =>
         (getEntityId(item).toLowerCase().includes("tft_item") &&
           (item.composition?.length ?? 0) > 0) ||
-        getEntityId(item).toLowerCase().includes("tft5_item"),
+        getEntityId(item).toLowerCase().includes("tft5_item") ||
+        (getEntityId(item).toLowerCase().includes("tft17_item") &&
+          (item.composition?.length ?? 0) > 0),
     )
     .filter((item) => item.name && item.name !== "None")
     .map((item) => ({
@@ -229,15 +232,11 @@ export async function getStaticAugments(): Promise<StaticAugment[]> {
   const latestSet = getLatestSet(data);
 
   const augmentIds = new Set(latestSet.augments ?? []);
-
+  // return data.items ?? [];
   return (data.items ?? [])
     .filter((item) => augmentIds.has(getEntityId(item)))
-    .filter(
-      (item) =>
-        getEntityId(item).toLowerCase().includes("tft_augment") ||
-        getEntityId(item).toLowerCase().includes("tft17_augment"),
-    )
-    .filter((item) => (item.apiName || item.id) && item.name)
+    .filter((item) => item.name && item.name !== "None")
+    .filter((item) => item.desc)
     .map((augment) => ({
       id: getEntityId(augment),
       name: augment.name ?? "Unknown",
@@ -246,4 +245,27 @@ export async function getStaticAugments(): Promise<StaticAugment[]> {
       description: formatDescription(augment.desc, augment.effects),
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
+}
+export async function inspectItemTags() {
+  const data = await fetchCommunityDragonTftData();
+
+  const tagMap: Record<string, string[]> = {};
+
+  for (const item of data.items ?? []) {
+    if (!item.tags || !item.name) continue;
+
+    for (const tag of item.tags) {
+      if (!tagMap[tag]) {
+        tagMap[tag] = [];
+      }
+
+      tagMap[tag].push(item.name);
+    }
+  }
+
+  return Object.entries(tagMap).map(([tag, itemNames]) => ({
+    tag,
+    count: itemNames.length,
+    samples: itemNames.slice(0, 10),
+  }));
 }
