@@ -17,6 +17,7 @@ type CommunityDragonImageEntity = {
   id?: string | number;
   name?: string;
   icon?: string;
+  composition?: string[];
   desc?: string;
   effects?: Record<string, number | string>;
 };
@@ -167,6 +168,11 @@ export async function getStaticChampions(): Promise<StaticChampion[]> {
   const latestSet = getLatestSet(data);
   return (latestSet.champions ?? [])
     .filter((champion) => champion.apiName && champion.name)
+    .filter(
+      (champion) =>
+        champion.apiName?.toLocaleLowerCase().includes("tft17") &&
+        (champion.traits?.length ?? 0) > 0,
+    )
     .map((champion) => ({
       id: champion.apiName ?? String(champion.id),
       name: champion.name ?? "Unknown",
@@ -181,12 +187,15 @@ export async function getStaticItems(): Promise<StaticItem[]> {
   const latestSet = getLatestSet(data);
 
   const itemIds = new Set(latestSet.items ?? []);
-
+  /* INSPECTING ITEM PROPS 
+  //return (data.items ?? [])
+  */
   return (data.items ?? [])
     .filter((item) => itemIds.has(getEntityId(item)))
     .filter(
       (item) =>
-        getEntityId(item).toLowerCase().includes("tft_item") ||
+        (getEntityId(item).toLowerCase().includes("tft_item") &&
+          (item.composition?.length ?? 0) > 0) ||
         getEntityId(item).toLowerCase().includes("tft5_item"),
     )
     .filter((item) => item.name && item.name !== "None")
@@ -223,7 +232,7 @@ export async function getStaticAugments(): Promise<StaticAugment[]> {
 
   return (data.items ?? [])
     .filter((item) => augmentIds.has(getEntityId(item)))
-     .filter(
+    .filter(
       (item) =>
         getEntityId(item).toLowerCase().includes("tft_augment") ||
         getEntityId(item).toLowerCase().includes("tft17_augment"),
