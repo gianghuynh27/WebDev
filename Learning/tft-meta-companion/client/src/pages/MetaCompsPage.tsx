@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
-import { mockComps } from "../data/mockComps";
 import { getMetaComps } from "../services/metaCompApi";
 import MetaCompCard from "../components/MetaCompCard";
 import {
@@ -44,16 +43,6 @@ function MetaCompsPage() {
 
     loadComps();
   }, []);
-  const tierOrder = {
-    S: 1,
-    A: 2,
-    B: 3,
-    C: 4,
-    D: 5,
-  };
-  const sortedComps = [...mockComps].sort((a, b) => {
-    return tierOrder[a.tier] - tierOrder[b.tier];
-  });
   function resolveMetaComp(
     comp: ApiMetaComp,
     champions: StaticChampion[],
