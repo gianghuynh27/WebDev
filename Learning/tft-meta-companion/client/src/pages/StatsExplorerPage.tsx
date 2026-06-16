@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import AugmentTierList from "../components/AugmentTierList";
 import StatsTable, { type StatsTableRow } from "../components/StatsTable";
-import { mockAugments, mockItems } from "../data/mockStats";
 import {
   getStaticChampions,
   type StaticChampion,
@@ -63,8 +62,7 @@ function StatsExplorerPage() {
     loadItems();
     async function loadAugments() {
       setIsLoadingAugments(true);
-      setItemsError("");
-
+      setAugmentsError("");
       try {
         const result = await getStaticAugments();
         setAugments(result);
@@ -142,7 +140,25 @@ function StatsExplorerPage() {
           </button>
         ))}
       </div>
-      {activeTab === "augments" && <AugmentTierList augments={augmentRows} />}
+      {activeTab === "augments" && (
+        <>
+          {isLoadingAugments && (
+            <p className="mt-6 text-sm text-slate-400">
+              Loading current augments...
+            </p>
+          )}
+
+          {augmentsError && (
+            <p className="mt-6 rounded-md border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+              {augmentsError}
+            </p>
+          )}
+
+          {!isLoadingAugments && !augmentsError && (
+            <AugmentTierList augments={augmentRows} />
+          )}
+        </>
+      )}{" "}
       {activeTab === "champions" && (
         <>
           {isLoadingChampions && (
@@ -158,11 +174,15 @@ function StatsExplorerPage() {
           )}
 
           {!isLoadingChampions && !championsError && (
-            <StatsTable nameHeader="Unit" rows={championRows.sort((a, b) => rankOrder[a.rank] - rankOrder[b.rank])} />
+            <StatsTable
+              nameHeader="Unit"
+              rows={championRows.sort(
+                (a, b) => rankOrder[a.rank] - rankOrder[b.rank],
+              )}
+            />
           )}
         </>
       )}
-
       {activeTab === "items" && (
         <>
           {isLoadingItems && (
@@ -180,7 +200,9 @@ function StatsExplorerPage() {
           {!isLoadingItems && !itemsError && (
             <StatsTable
               nameHeader="Item"
-              rows={itemRows.sort((a, b) => rankOrder[a.rank] - rankOrder[b.rank])}
+              rows={itemRows.sort(
+                (a, b) => rankOrder[a.rank] - rankOrder[b.rank],
+              )}
             />
           )}
         </>
