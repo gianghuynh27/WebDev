@@ -7,7 +7,7 @@ type AugmentCardProps = {
 function AugmentCard({ augment }: AugmentCardProps) {
   return (
     <div className="flex flex-col items-center gap-1">
-      <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg bg-slate-800 ring-1 ring-slate-700">
+      <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg bg-slate-800 ring-1 ring-slate-700" title ={augment.name}>
         {augment.imageUrl ? (
           <img
             src={augment.imageUrl}

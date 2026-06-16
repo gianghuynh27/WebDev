@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import CompCard from "../components/CompCard";
 import PageHeader from "../components/PageHeader";
 import { mockComps } from "../data/mockComps";
 import { getMetaComps } from "../services/metaCompApi";
@@ -72,6 +71,7 @@ function MetaCompsPage() {
         return {
           id: champion.id,
           name: champion.name,
+          cost: champion.cost,
           traits: champion.traits,
           imageUrl: champion.imageUrl,
           items: unit.itemIds

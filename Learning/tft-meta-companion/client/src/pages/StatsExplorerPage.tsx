@@ -11,7 +11,7 @@ import {
   getStaticAugments,
   type StaticAugment,
 } from "../services/staticDataApi";
-import type { AugmentStat } from "../types/stats";
+import type { AugmentStat, StatRank } from "../types/stats";
 
 function StatsExplorerPage() {
   const [champions, setChampions] = useState<StaticChampion[]>([]);
@@ -77,22 +77,36 @@ function StatsExplorerPage() {
 
     loadAugments();
   }, []);
-  const championRows: StatsTableRow[] = champions.map((champion) => ({
-    id: champion.id,
-    name: `${champion.name} (${champion.cost} cost)`,
-    imageUrl: champion.imageUrl,
-    rank: "B",
-    pickRate: 0,
-    top4Rate: 0,
-    winRate: 0,
-    avgPlacement: 0,
-  }));
+  function getRandomRank() {
+    const ranks: StatRank[] = ["S", "A", "B", "C", "D"];
+    return ranks[Math.floor(Math.random() * ranks.length)];
+  }
+  const rankOrder = {
+    S: 1,
+    A: 2,
+    B: 3,
+    C: 4,
+    D: 5,
+  };
+  const championRows: StatsTableRow[] = champions
+    .sort((a, b) => b.cost - a.cost)
+    .map((champion) => ({
+      id: champion.id,
+      name: champion.name,
+      imageUrl: champion.imageUrl,
+      cost: champion.cost,
+      rank: getRandomRank(),
+      pickRate: 0,
+      top4Rate: 0,
+      winRate: 0,
+      avgPlacement: 0,
+    }));
 
   const itemRows: StatsTableRow[] = items.map((item) => ({
     id: item.id,
     name: item.name,
     imageUrl: item.imageUrl,
-    rank: "B",
+    rank: getRandomRank(),
     pickRate: 0,
     top4Rate: 0,
     winRate: 0,
@@ -104,7 +118,7 @@ function StatsExplorerPage() {
     tier: augment.tier,
     imageUrl: augment.imageUrl,
     description: augment.description,
-    rank: "B",
+    rank: getRandomRank(),
   }));
   return (
     <div>
@@ -144,7 +158,7 @@ function StatsExplorerPage() {
           )}
 
           {!isLoadingChampions && !championsError && (
-            <StatsTable nameHeader="Unit" rows={championRows} />
+            <StatsTable nameHeader="Unit" rows={championRows.sort((a, b) => rankOrder[a.rank] - rankOrder[b.rank])} />
           )}
         </>
       )}
@@ -164,7 +178,10 @@ function StatsExplorerPage() {
           )}
 
           {!isLoadingItems && !itemsError && (
-            <StatsTable nameHeader="Item" rows={itemRows} />
+            <StatsTable
+              nameHeader="Item"
+              rows={itemRows.sort((a, b) => rankOrder[a.rank] - rankOrder[b.rank])}
+            />
           )}
         </>
       )}

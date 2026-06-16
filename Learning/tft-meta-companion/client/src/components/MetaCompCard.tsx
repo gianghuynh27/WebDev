@@ -1,5 +1,6 @@
 import type { ResolvedMetaComp } from "../types/tft";
 import { getTraitCounts } from "../utils/countTraits";
+import ChampionTile from "./ChampionTile";
 import Pill, { type PillVariant } from "./Pill";
 
 type MetaCompCardProps = {
@@ -15,7 +16,7 @@ function MetaCompCard({ comp }: MetaCompCardProps) {
   const traitCounts = getTraitCounts(comp.units);
 
   return (
-    <div className="grid gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow transition hover:border-cyan-500/40 hover:bg-slate-900 lg:grid-cols-[90px_1.5fr_2fr_1.5fr] lg:items-center">
+    <div className="grid gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow transition hover:border-cyan-500/40 hover:bg-slate-900 lg:grid-cols-[90px_0.5fr_4fr_0.5fr] lg:items-center">
       <div className="flex justify-center">
         <span
           className={`rounded-md px-3 py-1 text-sm font-bold ${
@@ -56,51 +57,16 @@ function MetaCompCard({ comp }: MetaCompCardProps) {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          {comp.units.map((unit) => (
-            <div key={unit.id} className="w-14 text-center">
-              <div className="relative h-12 w-12 overflow-hidden rounded-md border border-yellow-500 bg-slate-800">
-                {unit.imageUrl ? (
-                  <img
-                    src={unit.imageUrl}
-                    alt={unit.name}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-xs font-bold text-slate-300">
-                    {unit.name.slice(0, 2)}
-                  </div>
-                )}
-
-                {unit.items.length > 0 && (
-                  <div className="absolute -bottom-1 left-0 flex gap-0.5">
-                    {unit.items.slice(0, 3).map((item) => (
-                      <div
-                        key={item.id}
-                        title={item.name}
-                        className="h-4 w-4 overflow-hidden rounded-sm border border-slate-900 bg-amber-500 text-[8px]"
-                      >
-                        {item.imageUrl ? (
-                          <img
-                            src={item.imageUrl}
-                            alt={item.name}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          item.name.slice(0, 1)
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <p className="mt-1 truncate text-[11px] text-slate-300">
-                {unit.name}
-              </p>
-            </div>
+          {comp.units.sort((a, b) => a.cost - b.cost).map((unit) => (
+            <ChampionTile
+              key={unit.id}
+              name={unit.name}
+              cost={unit.cost}
+              imageUrl={unit.imageUrl}
+              items={unit.items}
+            />
           ))}
         </div>
-
         <div className="space-y-1">
           <p className="text-xs font-medium uppercase text-slate-500">
             Recommended Augments

@@ -47,6 +47,7 @@ export type ResolvedMetaCompItem = {
 export type ResolvedMetaCompUnit = {
   id: string;
   name: string;
+  cost: number;
   traits: string[];
   imageUrl?: string;
   items: ResolvedMetaCompItem[];
