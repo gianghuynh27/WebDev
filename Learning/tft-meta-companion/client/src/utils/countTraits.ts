@@ -1,11 +1,15 @@
-import type { Unit } from "../types/unit";
+type UnitWithTraits = {
+  traits: string[];
+};
 
-export function getTraitCounts(champions: Unit[]) {
-  return champions.reduce<Record<string, number>>((acc, champion) => {
-    champion.traits.forEach((trait) => {
-      acc[trait] = (acc[trait] || 0) + 1;
+export function getTraitCounts(units: UnitWithTraits[]) {
+  const traitCounts: Record<string, number> = {};
+
+  units.forEach((unit) => {
+    unit.traits.forEach((trait) => {
+      traitCounts[trait] = (traitCounts[trait] ?? 0) + 1;
     });
+  });
 
-    return acc;
-  }, {});
+  return traitCounts;
 }

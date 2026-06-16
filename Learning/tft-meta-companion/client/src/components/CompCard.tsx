@@ -9,7 +9,10 @@ type CompCardProps = {
 
 function CompCard({ comp }: CompCardProps) {
   const units = populateCompUnit(comp);
-
+  function formatRate(rate?: number | null) {
+    if (rate == null) return "-";
+    return `${Math.round(rate * 100)}%`;
+  }
   const traitCounts = getTraitCounts(units);
   return (
     <div className="grid gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow transition hover:border-cyan-500/40 hover:bg-slate-900 lg:grid-cols-[90px_1.5fr_2fr_1.5fr] lg:items-center">
@@ -130,17 +133,17 @@ function CompCard({ comp }: CompCardProps) {
 
         <div>
           <p className="text-slate-500">Top 4</p>
-          <p className="font-semibold text-green-400">{comp.top4Rate}%</p>
+          <p className="font-semibold text-green-400">{formatRate(comp.top4Rate)}</p>
         </div>
 
         <div>
           <p className="text-slate-500">Win</p>
-          <p className="font-semibold text-yellow-400">{comp.winRate}%</p>
+          <p className="font-semibold text-yellow-400">{formatRate(comp.winRate)}</p>
         </div>
 
         <div>
           <p className="text-slate-500">Play</p>
-          <p className="font-semibold text-slate-300">{comp.playRate}%</p>
+          <p className="font-semibold text-slate-300">{formatRate(comp.playRate)}</p>
         </div>
       </div>
     </div>

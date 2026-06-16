@@ -15,7 +15,13 @@ function findByName<T extends { name: string }>(items: T[], name: string) {
 
   return items.find((item) => normalizeName(item.name) === normalizedName);
 }
-
+export async function getMetaComps() {
+  return prisma.metaComp.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
 export async function createMetaCompFromNames(
   input: CreateMetaCompFromNamesInput,
 ) {

@@ -17,3 +17,42 @@ export type TftComp = {
   units: CompUnit[];
   recommendedAugments: string[];
 };
+
+export type ApiMetaCompUnit = {
+  championId: string;
+  itemIds: string[];
+};
+
+export type ApiMetaComp = {
+  id: string;
+  name: string;
+  tier: string;
+  difficulty: string;
+  type: string;
+  plannerUrl?: string | null;
+  avgPlacement?: number | null;
+  top4Rate?: number | null;
+  winRate?: number | null;
+  playRate?: number | null;
+  units: ApiMetaCompUnit[];
+  recommendedAugments: string[];
+};
+
+export type ResolvedMetaCompItem = {
+  id: string;
+  name: string;
+  imageUrl?: string;
+};
+
+export type ResolvedMetaCompUnit = {
+  id: string;
+  name: string;
+  traits: string[];
+  imageUrl?: string;
+  items: ResolvedMetaCompItem[];
+};
+
+export type ResolvedMetaComp = Omit<ApiMetaComp, "units" | "recommendedAugments"> & {
+  units: ResolvedMetaCompUnit[];
+  recommendedAugments: ResolvedMetaCompItem[];
+};
