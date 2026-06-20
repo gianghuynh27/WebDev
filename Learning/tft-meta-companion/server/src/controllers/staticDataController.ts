@@ -3,8 +3,10 @@ import {
   getStaticAugments,
   getStaticChampions,
   getStaticItems,
+  getStaticTraits,
   inspectItemTags,
   inspectStaticDataShape,
+  inspectTraitKeys,
 } from "../services/staticDataService";
 
 export async function inspectStaticDataController(
@@ -69,5 +71,22 @@ export async function getStaticAugmentsController(
     res.json(result);
   } catch {
     res.status(500).json({ message: "Failed to load static augments" });
+  }
+}
+export async function getStaticTraitsController(_req: Request, res: Response) {
+  try {
+    const result = await getStaticTraits();
+
+    res.json(result);
+  } catch {
+    res.status(500).json({ message: "Failed to load static traits" });
+  }
+}
+export async function inspectTraitKeysController(_req: Request, res: Response) {
+  try {
+    const result = await inspectTraitKeys();
+    res.json(result);
+  } catch {
+    res.status(500).json({ message: "Failed to inspect trait keys" });
   }
 }

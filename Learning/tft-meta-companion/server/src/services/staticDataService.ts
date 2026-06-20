@@ -2,6 +2,7 @@ import type {
   StaticAugment,
   StaticChampion,
   StaticItem,
+  StaticTrait,
 } from "../types/staticData";
 
 const COMMUNITY_DRAGON_TFT_URL =
@@ -34,12 +35,27 @@ type CommunityDragonSetData = {
   augments?: string[];
   champions?: CommunityDragonChampion[];
   items?: string[];
+  traits?: CommunityDragonTrait[];
 };
 
 type CommunityDragonTftData = {
   items?: CommunityDragonImageEntity[];
   setData?: CommunityDragonSetData[];
   sets?: Record<string, unknown>;
+};
+
+/* Traits type*/
+type CommunityDragonTraitEffect = {
+  minUnits?: number;
+  maxUnits?: number;
+  style?: number;
+};
+/*Can always expand if need details for each trait*/ 
+type CommunityDragonTrait = {
+  apiName?: string;
+  name?: string;
+  icon?: string;
+  effects?: CommunityDragonTraitEffect[];
 };
 
 function toCommunityDragonAssetUrl(icon?: string) {
@@ -172,7 +188,8 @@ export async function getStaticChampions(): Promise<StaticChampion[]> {
     .filter(
       (champion) =>
         (champion.apiName?.toLocaleLowerCase().includes("tft17") &&
-        (champion.traits?.length ?? 0) > 0) || (champion.apiName?.toLocaleLowerCase().includes("tft17_summon")),
+          (champion.traits?.length ?? 0) > 0) ||
+        champion.apiName?.toLocaleLowerCase().includes("tft17_summon"),
     )
     .map((champion) => ({
       id: champion.apiName ?? String(champion.id),
@@ -246,6 +263,27 @@ export async function getStaticAugments(): Promise<StaticAugment[]> {
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
+
+export async function getStaticTraits(): Promise<StaticTrait[]> {
+  const data = await fetchCommunityDragonTftData();
+  const latestSet = getLatestSet(data);
+
+  return (latestSet.traits ?? [])
+    .filter((trait) => trait.name && trait.name !== "None")
+    .map((trait) => ({
+      id: trait.apiName ?? trait.name ?? "Unknown",
+      name: trait.name ?? "Unknown",
+      imageUrl: toCommunityDragonAssetUrl(trait.icon),
+      breakpoints: (trait.effects ?? [])
+        .map((effect) => effect.minUnits)
+        .filter((minUnits): minUnits is number => typeof minUnits === "number"),
+    }))
+    .filter((trait) => trait.breakpoints.length > 0)
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+
+
 export async function inspectItemTags() {
   const data = await fetchCommunityDragonTftData();
 
@@ -268,4 +306,17 @@ export async function inspectItemTags() {
     count: itemNames.length,
     samples: itemNames.slice(0, 10),
   }));
+}
+
+export async function inspectTraitKeys(): Promise<string[]> {
+  const data = await fetchCommunityDragonTftData();
+  const latestSet = getLatestSet(data) as Record<string, unknown>;
+
+  const traits = latestSet.traits;
+
+  if (!Array.isArray(traits)) {
+    return [];
+  }
+
+  return traits;
 }

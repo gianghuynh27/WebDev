@@ -20,6 +20,14 @@ export type StaticAugment = {
   tier?: "silver" | "gold" | "prismatic";
   description?: string;
 };
+
+export type StaticTrait = {
+  id: string;
+  name: string;
+  breakpoints: number[];
+  imageUrl?: string;
+};
+
 export async function getStaticItems(): Promise<StaticItem[]> {
   const response = await fetch(`${API_URL}/api/static/items`);
 
@@ -44,6 +52,16 @@ export async function getStaticChampions(): Promise<StaticChampion[]> {
 
   if (!response.ok) {
     throw new Error("Failed to load static champions");
+  }
+
+  return response.json();
+}
+
+export async function getStaticTraits(): Promise<StaticTrait[]> {
+  const response = await fetch(`${API_URL}/api/static/traits`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load static traits");
   }
 
   return response.json();

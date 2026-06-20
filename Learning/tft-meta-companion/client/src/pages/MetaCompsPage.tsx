@@ -6,9 +6,11 @@ import {
   getStaticAugments,
   getStaticChampions,
   getStaticItems,
+  getStaticTraits,
   type StaticAugment,
   type StaticChampion,
   type StaticItem,
+  type StaticTrait,
 } from "../services/staticDataApi";
 import type {
   ApiMetaComp,
@@ -22,15 +24,16 @@ function MetaCompsPage() {
   useEffect(() => {
     async function loadComps() {
       try {
-        const [metaComps, champions, items, augments] = await Promise.all([
+        const [metaComps, champions, items, augments, traits] = await Promise.all([
           getMetaComps(),
           getStaticChampions(),
           getStaticItems(),
           getStaticAugments(),
+          getStaticTraits(),
         ]);
 
         const resolvedComps = metaComps.map((comp) =>
-          resolveMetaComp(comp, champions, items, augments),
+          resolveMetaComp(comp, champions, items, augments, traits),
         );
 
         setComps(resolvedComps);
@@ -48,6 +51,7 @@ function MetaCompsPage() {
     champions: StaticChampion[],
     items: StaticItem[],
     augments: StaticAugment[],
+    traits: StaticTrait[],
   ): ResolvedMetaComp {
     const resolvedUnits = comp.units
       .map((unit): ResolvedMetaCompUnit | null => {
@@ -78,6 +82,7 @@ function MetaCompsPage() {
       ...comp,
       units: resolvedUnits,
       recommendedAugments,
+      traits
     };
   }
   return (

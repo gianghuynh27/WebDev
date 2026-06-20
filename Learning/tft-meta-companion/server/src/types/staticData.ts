@@ -21,3 +21,10 @@ export type StaticAugment = {
   effects?: Record<string, number | string>;
   tags?: string[];
 };
+
+export type StaticTrait = {
+  id: string;
+  name: string;
+  breakpoints: number[];
+  imageUrl?: string;
+};

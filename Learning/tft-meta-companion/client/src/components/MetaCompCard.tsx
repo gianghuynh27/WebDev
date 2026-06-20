@@ -13,8 +13,30 @@ function formatRate(rate?: number | null) {
 }
 
 function MetaCompCard({ comp }: MetaCompCardProps) {
+  function getActiveBreakpoint(count: number, breakpoints: number[]) {
+    return [...breakpoints]
+      .sort((a, b) => b - a)
+      .find((breakpoint) => count >= breakpoint);
+  }
   const traitCounts = getTraitCounts(comp.units);
+  const activeTraits = Object.entries(traitCounts)
+    .map(([traitName, count]) => {
+      const trait = comp.traits.find((trait) => trait.name === traitName);
 
+      if (!trait) return null;
+
+      const activeBreakpoint = getActiveBreakpoint(count, trait.breakpoints);
+
+      if (!activeBreakpoint) return null;
+
+      return {
+        ...trait,
+        count,
+        activeBreakpoint,
+      };
+    })
+    .filter((trait) => trait !== null)
+    .sort((a, b) => b.count - a.count);
   return (
     <div className="grid gap-4 rounded-xl border border-slate-800 bg-slate-950/90 p-4 shadow transition hover:border-cyan-500/40 hover:bg-slate-900 lg:grid-cols-[90px_0.5fr_4fr_0.5fr] lg:items-center">
       <div className="flex justify-center">
@@ -49,23 +71,37 @@ function MetaCompCard({ comp }: MetaCompCardProps) {
 
       <div className="space-y-2">
         <div className="flex flex-wrap gap-1">
-          {Object.entries(traitCounts).map(([trait, count]) => (
-            <Pill key={trait} variant="trait">
-              {count} {trait}
+          {activeTraits.map((trait) => (
+            <Pill key={trait.id} variant="trait">
+              <span className="flex items-center gap-1">
+                <span>{trait.count}</span>
+
+                {trait.imageUrl ? (
+                  <img
+                    src={trait.imageUrl}
+                    alt={trait.name}
+                    title={trait.name}
+                    className="h-4 w-4 object-contain"
+                  />
+                ) : (
+                  <span title={trait.name}>{trait.name.slice(0, 2)}</span>
+                )}
+              </span>
             </Pill>
           ))}
         </div>
-
         <div className="flex flex-wrap gap-3">
-          {comp.units.sort((a, b) => a.cost - b.cost).map((unit) => (
-            <ChampionTile
-              key={unit.id}
-              name={unit.name}
-              cost={unit.cost}
-              imageUrl={unit.imageUrl}
-              items={unit.items}
-            />
-          ))}
+          {comp.units
+            .sort((a, b) => a.cost - b.cost)
+            .map((unit) => (
+              <ChampionTile
+                key={unit.id}
+                name={unit.name}
+                cost={unit.cost}
+                imageUrl={unit.imageUrl}
+                items={unit.items}
+              />
+            ))}
         </div>
         <div className="space-y-1">
           <p className="text-xs font-medium uppercase text-slate-500">

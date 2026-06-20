@@ -52,8 +52,14 @@ export type ResolvedMetaCompUnit = {
   imageUrl?: string;
   items: ResolvedMetaCompItem[];
 };
-
+export type ResolvedMetaCompTrait = {
+  id: string;
+  name: string;
+  breakpoints: number[];
+  imageUrl?: string;
+};
 export type ResolvedMetaComp = Omit<ApiMetaComp, "units" | "recommendedAugments"> & {
   units: ResolvedMetaCompUnit[];
   recommendedAugments: ResolvedMetaCompItem[];
+  traits: ResolvedMetaCompTrait[];
 };

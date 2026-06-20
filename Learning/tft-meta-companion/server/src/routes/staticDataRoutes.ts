@@ -3,8 +3,10 @@ import {
     getStaticAugmentsController,
   getStaticChampionsController,
   getStaticItemsController,
+  getStaticTraitsController,
   inspectStaticDataController,
   inspectStaticItemsController,
+  inspectTraitKeysController,
 } from "../controllers/staticDataController";
 
 const router = Router();
@@ -14,4 +16,6 @@ router.get("/champions", getStaticChampionsController);
 router.get("/items", getStaticItemsController);
 router.get("/augments", getStaticAugmentsController);
 router.get("/items/tags", inspectStaticItemsController);
+router.get("/traits", getStaticTraitsController);
+router.get("/inspect/traits", inspectTraitKeysController);
 export default router;
