@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createMetaCompController, getMetaCompsController } from "../controllers/metaCompController";
+import { createMetaCompController, getMetaCompsController } from "../controllers/metaCompController.js";
 
 const router = Router();
 

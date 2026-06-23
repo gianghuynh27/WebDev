@@ -1,5 +1,5 @@
-import { login, signup } from "../services/authService";
-import { LoginRequest, SignupRequest } from "../types/auth";
+import { login, signup } from "../services/authService.js";
+import { LoginRequest, SignupRequest } from "../types/auth.js";
 import type { Request, Response } from "express";
 
 export async function signupController(

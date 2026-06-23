@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { createMetaCompFromNames, getMetaComps } from "../services/metaCompService";
+import { createMetaCompFromNames, getMetaComps } from "../services/metaCompService.js";
 
 export async function createMetaCompController(req: Request, res: Response) {
   try {

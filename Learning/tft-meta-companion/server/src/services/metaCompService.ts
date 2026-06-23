@@ -1,10 +1,10 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 import {
   getStaticAugments,
   getStaticChampions,
   getStaticItems,
-} from "./staticDataService";
-import type { CreateMetaCompFromNamesInput } from "../types/metaComp";
+} from "./staticDataService.js";
+import type { CreateMetaCompFromNamesInput } from "../types/metaComp.js";
 
 function normalizeName(name: string) {
   return name.trim().toLowerCase();

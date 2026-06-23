@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import type { CoachRequest, CoachResponse } from "../types/coach";
+import type { CoachRequest, CoachResponse } from "../types/coach.js";
 
 function createOpenAIClient() {
   return new OpenAI({

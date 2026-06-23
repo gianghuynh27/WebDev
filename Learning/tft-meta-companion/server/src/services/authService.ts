@@ -1,7 +1,7 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import type { AuthResponse, LoginRequest, SignupRequest } from "../types/auth";
+import type { AuthResponse, LoginRequest, SignupRequest } from "../types/auth.js";
 
 
 function createToken(userId: string) {

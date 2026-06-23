@@ -60,3 +60,11 @@ const metaComp = {
     "Late Game Specialist"
   ]
 };
+
+const matchIds = [
+    "NA1_5585270451",
+    "NA1_5585106036",
+    "NA1_5585084774",
+    "NA1_5584591080",
+    "NA1_5582961667"
+]

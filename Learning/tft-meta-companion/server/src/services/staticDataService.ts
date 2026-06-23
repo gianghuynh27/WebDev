@@ -3,7 +3,7 @@ import type {
   StaticChampion,
   StaticItem,
   StaticTrait,
-} from "../types/staticData";
+} from "../types/staticData.js";
 
 const COMMUNITY_DRAGON_TFT_URL =
   process.env.COMMUNITY_DRAGON_TFT_URL ??

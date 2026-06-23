@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import type { CoachRequest } from "../types/coach";
-import { getCoachRecommendation } from "../services/coachService";
+import type { CoachRequest } from "../types/coach.js";
+import { getCoachRecommendation } from "../services/coachService.js";
 
 export async function getCoachRecommendationController(
   req: Request<unknown, unknown, CoachRequest>,

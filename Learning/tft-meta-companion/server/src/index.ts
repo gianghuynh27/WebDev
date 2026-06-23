@@ -2,10 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
-import coachRoutes from "./routes/coachRoutes";
-import authRoutes from "./routes/authRoutes";
-import staticDataRoutes from "./routes/staticDataRoutes"
-import metaCompRoutes from "./routes/metaCompRoutes";
+import coachRoutes from "./routes/coachRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import staticDataRoutes from "./routes/staticDataRoutes.js"
+import metaCompRoutes from "./routes/metaCompRoutes.js";
+import riotApiRoutes from "./routes/riotApiRoutes.js";
 
 const app = express();
 const port = process.env.PORT ?? 4000;
@@ -16,6 +17,7 @@ app.use("/api/coach", coachRoutes);
 app.use("/api/auth", authRoutes)
 app.use("/api/static", staticDataRoutes)
 app.use("/api/meta-comps", metaCompRoutes);
+app.use("/api/riot", riotApiRoutes);
 app.get("/", (_req, res) => {
   res.json({ status: "ok" });
 });

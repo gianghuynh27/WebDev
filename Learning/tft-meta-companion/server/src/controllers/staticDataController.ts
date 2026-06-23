@@ -7,7 +7,7 @@ import {
   inspectItemTags,
   inspectStaticDataShape,
   inspectTraitKeys,
-} from "../services/staticDataService";
+} from "../services/staticDataService.js";
 
 export async function inspectStaticDataController(
   _req: Request,

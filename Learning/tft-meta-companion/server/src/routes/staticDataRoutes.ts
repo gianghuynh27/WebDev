@@ -7,7 +7,7 @@ import {
   inspectStaticDataController,
   inspectStaticItemsController,
   inspectTraitKeysController,
-} from "../controllers/staticDataController";
+} from "../controllers/staticDataController.js";
 
 const router = Router();
 
