@@ -50,7 +50,7 @@ type CommunityDragonTraitEffect = {
   maxUnits?: number;
   style?: number;
 };
-/*Can always expand if need details for each trait*/ 
+/*Can always expand if need details for each trait*/
 type CommunityDragonTrait = {
   apiName?: string;
   name?: string;
@@ -70,6 +70,7 @@ function toCommunityDragonAssetUrl(icon?: string) {
 
   return `${COMMUNITY_DRAGON_BASE_URL}/game/${cleanedPath}`;
 }
+let cachedTftData: CommunityDragonTftData | null = null;
 
 function getLatestSet(data: CommunityDragonTftData) {
   if (!data.setData || data.setData.length === 0) {
@@ -81,13 +82,18 @@ function getLatestSet(data: CommunityDragonTftData) {
   });
 }
 async function fetchCommunityDragonTftData(): Promise<CommunityDragonTftData> {
+  if (cachedTftData) {
+    return cachedTftData;
+  }
   const response = await fetch(COMMUNITY_DRAGON_TFT_URL);
 
   if (!response.ok) {
     throw new Error("Failed to fetch CommunityDragon TFT data");
   }
 
-  return response.json();
+  const data = (await response.json()) as CommunityDragonTftData;
+  cachedTftData = data;
+  return cachedTftData;
 }
 function getEntityId(entity: CommunityDragonImageEntity) {
   return entity.apiName ?? String(entity.id);
@@ -281,8 +287,6 @@ export async function getStaticTraits(): Promise<StaticTrait[]> {
     .filter((trait) => trait.breakpoints.length > 0)
     .sort((a, b) => a.name.localeCompare(b.name));
 }
-
-
 
 export async function inspectItemTags() {
   const data = await fetchCommunityDragonTftData();
