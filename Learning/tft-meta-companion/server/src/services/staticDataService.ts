@@ -1,3 +1,4 @@
+import { prisma } from "../lib/prisma.js";
 import type {
   StaticAugment,
   StaticChampion,
@@ -324,3 +325,99 @@ export async function inspectTraitKeys(): Promise<string[]> {
 
   return traits;
 }
+
+export async function syncStaticData() {
+  const [champions, items, augments, traits] = await Promise.all([
+    getStaticChampions(),
+    getStaticItems(),
+    getStaticAugments(),
+    getStaticTraits(),
+  ]);
+
+  for (const champion of champions) {
+    await prisma.staticChampion.upsert({
+      where: {
+        id: champion.id,
+      },
+      update: {
+        name: champion.name,
+        cost: champion.cost,
+        traits: champion.traits,
+        imageUrl: champion.imageUrl,
+        setNumber: 17,
+      },
+      create: {
+        id: champion.id,
+        name: champion.name,
+        cost: champion.cost,
+        traits: champion.traits,
+        imageUrl: champion.imageUrl,
+        setNumber: 17,
+      },
+    });
+  }
+  for (const item of items) {
+    await prisma.staticItem.upsert({
+      where: {
+        id: item.id,
+      },
+      update: {
+        name: item.name,
+        imageUrl: item.imageUrl,
+        setNumber: 17,
+      },
+      create: {
+        id: item.id,
+        name: item.name,
+        imageUrl: item.imageUrl,
+        setNumber: 17,
+      },
+    });
+  }
+  for (const augment of augments) {
+    await prisma.staticAugment.upsert({
+      where: { id: augment.id },
+      update: {
+        name: augment.name,
+        imageUrl: augment.imageUrl,
+        tier: augment.tier,
+        description: augment.description,
+        setNumber: 17,
+      },
+      create: {
+        id: augment.id,
+        name: augment.name,
+        imageUrl: augment.imageUrl,
+        tier: augment.tier,
+        description: augment.description,
+        setNumber: 17,
+      },
+    });
+  }
+  for (const trait of traits) {
+    await prisma.staticTrait.upsert({
+      where: { id: trait.id },
+      update: {
+        name: trait.name,
+        breakpoints: trait.breakpoints,
+        imageUrl: trait.imageUrl,
+        setNumber: 17,
+      },
+      create: {
+        id: trait.id,
+        name: trait.name,
+        breakpoints: trait.breakpoints,
+        imageUrl: trait.imageUrl,
+        setNumber: 17,
+      },
+    });
+  }
+  return {
+    championCount: champions.length,
+    itemCount: items.length,
+    augmentCount: augments.length,
+    traitCount: traits.length,
+  };
+}
+
+

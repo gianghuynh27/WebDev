@@ -7,6 +7,7 @@ import {
   inspectItemTags,
   inspectStaticDataShape,
   inspectTraitKeys,
+  syncStaticData,
 } from "../services/staticDataService.js";
 
 export async function inspectStaticDataController(
@@ -88,5 +89,16 @@ export async function inspectTraitKeysController(_req: Request, res: Response) {
     res.json(result);
   } catch {
     res.status(500).json({ message: "Failed to inspect trait keys" });
+  }
+}
+
+export async function syncStaticDataController(_req: Request, res: Response) {
+  try {
+    const result = await syncStaticData();
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error rebuilding stats:", error);
+    res.status(500).json({ message: "Failed to rebuild stats" });
   }
 }

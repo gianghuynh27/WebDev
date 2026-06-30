@@ -45,3 +45,82 @@ model RiotMatch {
   raw         Json
   createdAt   DateTime @default(now())
 }
+
+model StaticChampion {
+  id        String   @id
+  name      String
+  cost      Int
+  traits    Json
+  imageUrl  String?
+  setNumber Int?
+  updatedAt DateTime @updatedAt
+}
+
+model StaticItem {
+  id        String   @id
+  name      String
+  imageUrl  String?
+  setNumber Int?
+  updatedAt DateTime @updatedAt
+}
+
+model StaticAugment {
+  id          String   @id
+  name        String
+  imageUrl    String?
+  tier        String?
+  description String?
+  setNumber   Int?
+  updatedAt   DateTime @updatedAt
+}
+
+model StaticTrait {
+  id          String   @id
+  name        String
+  breakpoints Json
+  imageUrl    String?
+  setNumber   Int?
+  updatedAt   DateTime @updatedAt
+}
+
+model ChampionStat {
+  id             String   @id @default(uuid())
+  championId     String   @unique
+  rank           String
+  games          Int
+  totalPlacement Int
+  top4Count      Int
+  winCount       Int
+  avgPlacement   Float
+  top4Rate       Float
+  winRate        Float
+  updatedAt      DateTime @updatedAt
+}
+
+model ItemStat {
+  id             String   @id @default(uuid())
+  itemId         String   @unique
+  rank           String
+  games          Int
+  totalPlacement Int
+  top4Count      Int
+  winCount       Int
+  avgPlacement   Float
+  top4Rate       Float
+  winRate        Float
+  updatedAt      DateTime @updatedAt
+}
+
+model AugmentStat {
+  id             String   @id @default(uuid())
+  augmentId      String   @unique
+  rank           String
+  games          Int
+  totalPlacement Int
+  top4Count      Int
+  winCount       Int
+  avgPlacement   Float
+  top4Rate       Float
+  winRate        Float
+  updatedAt      DateTime @updatedAt
+}

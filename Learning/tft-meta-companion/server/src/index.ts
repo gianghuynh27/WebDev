@@ -7,7 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import staticDataRoutes from "./routes/staticDataRoutes.js"
 import metaCompRoutes from "./routes/metaCompRoutes.js";
 import riotApiRoutes from "./routes/riotApiRoutes.js";
-
+import statsAggregationRoutes from "./routes/statsAggregationRoute.js"
 const app = express();
 const port = process.env.PORT ?? 4000;
 console.log(`Using OpenAI API Key: ${!!process.env.OPENAI_API_KEY}`);
@@ -18,6 +18,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/static", staticDataRoutes)
 app.use("/api/meta-comps", metaCompRoutes);
 app.use("/api/riot", riotApiRoutes);
+app.use("/api/riot", statsAggregationRoutes);
 app.get("/", (_req, res) => {
   res.json({ status: "ok" });
 });
