@@ -421,3 +421,55 @@ export async function syncStaticData() {
 }
 
 
+export async function getDbStaticChampions(): Promise<StaticChampion[]> {
+  const champions = await prisma.staticChampion.findMany({
+    orderBy: [{ cost: "desc" }, { name: "asc" }],
+  });
+
+  return champions.map((champion) => ({
+    id: champion.id,
+    name: champion.name,
+    cost: champion.cost,
+    traits: champion.traits as string[],
+    imageUrl: champion.imageUrl ?? undefined,
+  }));
+}
+
+export async function getDbStaticItems(): Promise<StaticItem[]> {
+  const items = await prisma.staticItem.findMany({
+    orderBy: { name: "asc" },
+  });
+
+  return items.map((item) => ({
+    id: item.id,
+    name: item.name,
+    imageUrl: item.imageUrl ?? undefined,
+  }));
+}
+
+export async function getDbStaticAugments(): Promise<StaticAugment[]> {
+  const augments = await prisma.staticAugment.findMany({
+    orderBy: { name: "asc" },
+  });
+
+  return augments.map((augment) => ({
+    id: augment.id,
+    name: augment.name,
+    imageUrl: augment.imageUrl ?? undefined,
+    tier: augment.tier as StaticAugment["tier"],
+    description: augment.description ?? undefined,
+  }));
+}
+
+export async function getDbStaticTraits(): Promise<StaticTrait[]> {
+  const traits = await prisma.staticTrait.findMany({
+    orderBy: { name: "asc" },
+  });
+
+  return traits.map((trait) => ({
+    id: trait.id,
+    name: trait.name,
+    breakpoints: trait.breakpoints as number[],
+    imageUrl: trait.imageUrl ?? undefined,
+  }));
+}

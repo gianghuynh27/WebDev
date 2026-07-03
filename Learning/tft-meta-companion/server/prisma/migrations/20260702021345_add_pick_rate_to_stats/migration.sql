@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "AugmentStat" ADD COLUMN     "pickRate" DOUBLE PRECISION NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "ChampionStat" ADD COLUMN     "pickRate" DOUBLE PRECISION NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "ItemStat" ADD COLUMN     "pickRate" DOUBLE PRECISION NOT NULL DEFAULT 0;

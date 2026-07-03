@@ -92,6 +92,7 @@ model ChampionStat {
   top4Count      Int
   winCount       Int
   avgPlacement   Float
+  pickRate       Float @default(0)
   top4Rate       Float
   winRate        Float
   updatedAt      DateTime @updatedAt
@@ -105,6 +106,7 @@ model ItemStat {
   totalPlacement Int
   top4Count      Int
   winCount       Int
+  pickRate       Float @default(0)
   avgPlacement   Float
   top4Rate       Float
   winRate        Float
@@ -119,6 +121,7 @@ model AugmentStat {
   totalPlacement Int
   top4Count      Int
   winCount       Int
+  pickRate       Float @default(0)
   avgPlacement   Float
   top4Rate       Float
   winRate        Float

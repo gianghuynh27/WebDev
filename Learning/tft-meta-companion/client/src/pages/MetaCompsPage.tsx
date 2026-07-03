@@ -1,22 +1,9 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
-import { getMetaComps } from "../services/metaCompApi";
+import { getResolvedMetaComps } from "../services/metaCompApi";
 import MetaCompCard from "../components/MetaCompCard";
-import {
-  getStaticAugments,
-  getStaticChampions,
-  getStaticItems,
-  getStaticTraits,
-  type StaticAugment,
-  type StaticChampion,
-  type StaticItem,
-  type StaticTrait,
-} from "../services/staticDataApi";
-import type {
-  ApiMetaComp,
-  ResolvedMetaComp,
-  ResolvedMetaCompUnit,
-} from "../types/tft";
+
+import type { ResolvedMetaComp } from "../types/tft";
 function MetaCompsPage() {
   const [comps, setComps] = useState<ResolvedMetaComp[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,19 +11,8 @@ function MetaCompsPage() {
   useEffect(() => {
     async function loadComps() {
       try {
-        const [metaComps, champions, items, augments, traits] = await Promise.all([
-          getMetaComps(),
-          getStaticChampions(),
-          getStaticItems(),
-          getStaticAugments(),
-          getStaticTraits(),
-        ]);
-
-        const resolvedComps = metaComps.map((comp) =>
-          resolveMetaComp(comp, champions, items, augments, traits),
-        );
-
-        setComps(resolvedComps);
+        const resolvedMetaComps = await getResolvedMetaComps();
+        setComps(resolvedMetaComps);
       } catch {
         setError("Failed to load meta comps.");
       } finally {
@@ -46,45 +22,6 @@ function MetaCompsPage() {
 
     loadComps();
   }, []);
-  function resolveMetaComp(
-    comp: ApiMetaComp,
-    champions: StaticChampion[],
-    items: StaticItem[],
-    augments: StaticAugment[],
-    traits: StaticTrait[],
-  ): ResolvedMetaComp {
-    const resolvedUnits = comp.units
-      .map((unit): ResolvedMetaCompUnit | null => {
-        const champion = champions.find(
-          (champion) => champion.id === unit.championId,
-        );
-
-        if (!champion) return null;
-
-        return {
-          id: champion.id,
-          name: champion.name,
-          cost: champion.cost,
-          traits: champion.traits,
-          imageUrl: champion.imageUrl,
-          items: unit.itemIds
-            .map((itemId) => items.find((item) => item.id === itemId))
-            .filter((item): item is StaticItem => item !== undefined),
-        };
-      })
-      .filter((unit): unit is ResolvedMetaCompUnit => unit !== null);
-
-    const recommendedAugments = comp.recommendedAugments
-      .map((augmentId) => augments.find((augment) => augment.id === augmentId))
-      .filter((augment): augment is StaticAugment => augment !== undefined);
-
-    return {
-      ...comp,
-      units: resolvedUnits,
-      recommendedAugments,
-      traits
-    };
-  }
   return (
     <div className="space-y-8">
       <PageHeader

@@ -39,16 +39,18 @@ function getRank(avgPlacement: number) {
   return "D";
 }
 
-function bucketToStats(bucket: AggregateBucket) {
+function bucketToStats(bucket: AggregateBucket, totalParticipants: number) {
   const avgPlacement = bucket.totalPlacement / bucket.games;
   const top4Rate = (bucket.top4Count / bucket.games) * 100;
   const winRate = (bucket.winCount / bucket.games) * 100;
+  const pickRate = (bucket.games / totalParticipants) * 100;
 
   return {
     games: bucket.games,
     totalPlacement: bucket.totalPlacement,
     top4Count: bucket.top4Count,
     winCount: bucket.winCount,
+    pickRate,
     avgPlacement,
     top4Rate,
     winRate,
@@ -76,11 +78,13 @@ export async function rebuildStatsFromMatches() {
   const championBuckets = new Map<string, AggregateBucket>();
   const itemBuckets = new Map<string, AggregateBucket>();
   //   const augmentBuckets = new Map<string, AggregateBucket>();
+  let totalParticipants = 0;
 
   for (const storedMatch of matches) {
     const match = storedMatch.raw as RiotTftMatch;
 
     for (const participant of match.info.participants) {
+      totalParticipants++;
       const placement = participant.placement;
 
       for (const unit of participant.units) {
@@ -106,7 +110,7 @@ export async function rebuildStatsFromMatches() {
     }
   }
   for (const [championId, bucket] of championBuckets) {
-    const stats = bucketToStats(bucket);
+    const stats = bucketToStats(bucket, totalParticipants);
 
     await prisma.championStat.upsert({
       where: {
@@ -121,7 +125,7 @@ export async function rebuildStatsFromMatches() {
   }
 
   for (const [itemId, bucket] of itemBuckets) {
-    const stats = bucketToStats(bucket);
+    const stats = bucketToStats(bucket, totalParticipants);
 
     await prisma.itemStat.upsert({
       where: {
@@ -140,4 +144,67 @@ export async function rebuildStatsFromMatches() {
     itemCount: itemBuckets.size,
     //augmentCount: augmentBuckets.size,
   };
+}
+
+export async function getChampionStatsForClient() {
+  const stats = await prisma.championStat.findMany({
+    orderBy: [
+      { rank: "asc" },
+      { avgPlacement: "asc" },
+    ],
+  });
+
+  const champions = await prisma.staticChampion.findMany();
+
+  return stats
+    .map((stat) => {
+      const champion = champions.find(
+        (champion) => champion.id === stat.championId,
+      );
+
+      if (!champion) return null;
+
+      return {
+        id: champion.id,
+        name: champion.name,
+        imageUrl: champion.imageUrl ?? undefined,
+        cost: champion.cost,
+        rank: stat.rank,
+        pickRate: Number(stat.pickRate.toFixed(1)),
+        top4Rate: Number(stat.top4Rate.toFixed(1)),
+        winRate: Number(stat.winRate.toFixed(1)),
+        avgPlacement: Number(stat.avgPlacement.toFixed(2)),
+      };
+    })
+    .filter((row) => row !== null);
+}
+
+export async function getItemStatsForClient() {
+  const stats = await prisma.itemStat.findMany({
+    orderBy: [
+      { rank: "asc" },
+      { avgPlacement: "asc" },
+    ],
+  });
+
+  const items = await prisma.staticItem.findMany();
+
+  return stats
+    .map((stat) => {
+      const item = items.find((item) => item.id === stat.itemId);
+
+      if (!item) return null;
+
+      return {
+        id: item.id,
+        name: item.name,
+        imageUrl: item.imageUrl ?? undefined,
+        rank: stat.rank,
+        pickRate: stat.pickRate.toFixed(1),
+        top4Rate: Number(stat.top4Rate.toFixed(1)),
+        winRate: Number(stat.winRate.toFixed(1)),
+        avgPlacement: Number(stat.avgPlacement.toFixed(2)),
+      };
+    })
+    .filter((row) => row !== null);
 }

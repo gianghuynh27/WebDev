@@ -1,24 +1,23 @@
 import { Router } from "express";
 import {
-    getStaticAugmentsController,
-  getStaticChampionsController,
-  getStaticItemsController,
-  getStaticTraitsController,
+  getDbStaticAugmentsController,
+  getDbStaticChampionsController,
+  getDbStaticItemsController,
+  getDbStaticTraitsController,
   inspectStaticDataController,
   inspectStaticItemsController,
   inspectTraitKeysController,
   syncStaticDataController,
-  
 } from "../controllers/staticDataController.js";
 
 const router = Router();
 
 router.get("/inspect", inspectStaticDataController);
-router.get("/champions", getStaticChampionsController);
-router.get("/items", getStaticItemsController);
-router.get("/augments", getStaticAugmentsController);
+router.get("/champions", getDbStaticChampionsController);
+router.get("/items", getDbStaticItemsController);
+router.get("/augments", getDbStaticAugmentsController);
 router.get("/items/tags", inspectStaticItemsController);
-router.get("/traits", getStaticTraitsController);
+router.get("/traits", getDbStaticTraitsController);
 router.get("/inspect/traits", inspectTraitKeysController);
 router.post("/sync", syncStaticDataController);
 export default router;
