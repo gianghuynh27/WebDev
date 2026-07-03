@@ -3,20 +3,16 @@ import PageHeader from "../components/PageHeader";
 import AugmentTierList from "../components/AugmentTierList";
 import StatsTable, { type StatsTableRow } from "../components/StatsTable";
 import {
-  getStaticChampions,
-  type StaticChampion,
-  getStaticItems,
-  type StaticItem,
   getStaticAugments,
   type StaticAugment,
 } from "../services/staticDataApi";
 import type { AugmentStat, StatRank } from "../types/stats";
-
+import { getChampionStats, getItemStats } from "../services/statsApi";
 function StatsExplorerPage() {
-  const [champions, setChampions] = useState<StaticChampion[]>([]);
+  const [championRows, setChampionRows] = useState<StatsTableRow[]>([]);
   const [isLoadingChampions, setIsLoadingChampions] = useState(false);
   const [championsError, setChampionsError] = useState("");
-  const [items, setItems] = useState<StaticItem[]>([]);
+  const [itemRows, setItemRows] = useState<StatsTableRow[]>([]);
   const [isLoadingItems, setIsLoadingItems] = useState(false);
   const [itemsError, setItemsError] = useState("");
   const [augments, setAugments] = useState<StaticAugment[]>([]);
@@ -35,8 +31,8 @@ function StatsExplorerPage() {
       setChampionsError("");
 
       try {
-        const result = await getStaticChampions();
-        setChampions(result);
+        const result = await getChampionStats();
+        setChampionRows(result);
       } catch {
         setChampionsError("Could not load current TFT champions.");
       } finally {
@@ -50,8 +46,8 @@ function StatsExplorerPage() {
       setItemsError("");
 
       try {
-        const result = await getStaticItems();
-        setItems(result);
+        const result = await getItemStats();
+        setItemRows(result);
       } catch {
         setItemsError("Could not load current TFT items.");
       } finally {
@@ -86,30 +82,7 @@ function StatsExplorerPage() {
     C: 4,
     D: 5,
   };
-  const championRows: StatsTableRow[] = champions
-    .sort((a, b) => b.cost - a.cost)
-    .map((champion) => ({
-      id: champion.id,
-      name: champion.name,
-      imageUrl: champion.imageUrl,
-      cost: champion.cost,
-      rank: getRandomRank(),
-      pickRate: 0,
-      top4Rate: 0,
-      winRate: 0,
-      avgPlacement: 0,
-    }));
 
-  const itemRows: StatsTableRow[] = items.map((item) => ({
-    id: item.id,
-    name: item.name,
-    imageUrl: item.imageUrl,
-    rank: getRandomRank(),
-    pickRate: 0,
-    top4Rate: 0,
-    winRate: 0,
-    avgPlacement: 0,
-  }));
   const augmentRows: AugmentStat[] = augments.map((augment) => ({
     id: augment.id,
     name: augment.name,
