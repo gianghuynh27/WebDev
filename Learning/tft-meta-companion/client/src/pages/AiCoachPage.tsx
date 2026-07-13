@@ -32,7 +32,6 @@ function AiCoachPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Your tft companion"
         title="AI Coach"
         description="Enter your current game state and get a mocked coaching recommendation later."
       />

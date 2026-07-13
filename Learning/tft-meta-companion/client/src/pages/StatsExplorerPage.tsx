@@ -6,7 +6,6 @@ import {
   getStaticAugments,
   type StaticAugment,
 } from "../services/staticDataApi";
-import type { AugmentStat, StatRank } from "../types/stats";
 import { getChampionStats, getItemStats } from "../services/statsApi";
 function StatsExplorerPage() {
   const [championRows, setChampionRows] = useState<StatsTableRow[]>([]);
@@ -71,10 +70,7 @@ function StatsExplorerPage() {
 
     loadAugments();
   }, []);
-  function getRandomRank() {
-    const ranks: StatRank[] = ["S", "A", "B", "C", "D"];
-    return ranks[Math.floor(Math.random() * ranks.length)];
-  }
+
   const rankOrder = {
     S: 1,
     A: 2,
@@ -83,18 +79,10 @@ function StatsExplorerPage() {
     D: 5,
   };
 
-  const augmentRows: AugmentStat[] = augments.map((augment) => ({
-    id: augment.id,
-    name: augment.name,
-    tier: augment.tier,
-    imageUrl: augment.imageUrl,
-    description: augment.description,
-    rank: getRandomRank(),
-  }));
+  
   return (
     <div>
       <PageHeader
-        eyebrow="Milestone 3 starts here"
         title="Stats Explorer"
         description="Explore current stats for augments, items, and more."
       />
@@ -128,7 +116,7 @@ function StatsExplorerPage() {
           )}
 
           {!isLoadingAugments && !augmentsError && (
-            <AugmentTierList augments={augmentRows} />
+            <AugmentTierList augments={augments} />
           )}
         </>
       )}{" "}

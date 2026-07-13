@@ -1,7 +1,7 @@
-import type { AugmentStat } from "../types/stats";
+import type { StaticAugment } from "../services/staticDataApi";
 
 type AugmentCardProps = {
-  augment: AugmentStat;
+  augment: StaticAugment;
 };
 
 function AugmentCard({ augment }: AugmentCardProps) {

@@ -40,7 +40,6 @@ function AuthPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Account"
         title={mode === "signup" ? "Create Account" : "Login"}
         description="Sign in to save your TFT coach and stats experience later."
       />

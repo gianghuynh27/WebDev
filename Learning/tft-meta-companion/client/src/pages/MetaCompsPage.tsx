@@ -25,7 +25,6 @@ function MetaCompsPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Live database data"
         title="Meta Comps"
         description="Explore curated TFT comps from your backend."
       />
