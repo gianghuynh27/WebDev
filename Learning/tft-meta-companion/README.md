@@ -19,17 +19,12 @@ The project also includes an AI coaching feature that accepts a player's current
 
 ## Screenshots
 
-_Add screenshots or a short GIF here before sharing the repository with recruiters._
-
-<!-- Example:
-![Stats Explorer](docs/screenshots/stats-explorer.png)
-![AI Coach](docs/screenshots/ai-coach.png)
--->
+<img width="1422" height="830" alt="image" src="https://github.com/user-attachments/assets/b35a83e6-30d0-4d11-a598-ac85fff3d98c" />
 
 ## Live Demo
 
-- **Frontend:** Add deployed Vercel URL
-- **API:** Add deployed Render URL
+- **Frontend: https://client-six-red.vercel.app/
+- **API: https://tft-meta-companion-server.onrender.com
 
 ## Tech Stack
 
